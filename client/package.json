@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",
+    "classcat": "^3.2.5",
     "history": "^4.7.2",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",

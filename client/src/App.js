@@ -1,6 +1,7 @@
 import React from 'react';
 import {Router, Switch, Route} from 'react-router-dom';
 import createBrowserHistory from "history/createBrowserHistory";
+import {HistoryContext} from './context';
 import Landing from './Landing';
 import GetLoan from './GetLoan';
 
@@ -19,16 +20,15 @@ function App () {
         </div>
       </div>
       <div className="body container">
-        <h1 className="text-center my-3">Instant Crypto Loans</h1>
-        <Router history={history}>
-          <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/loan" component={GetLoan} />
-          </Switch>
-        </Router>
-      </div>
-      <div className="footer">
-        <div className="text-center">ETHParis - 12months team - <a href="http://decentral.ee" target="_blank" rel="noopener noreferrer">decentral.ee</a></div>
+        <h3 className="text-center d-inline">Instant Crypto Loans</h3>
+        <HistoryContext.Provider value={history}>
+          <Router history={history}>
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route path="/loan" component={GetLoan} />
+            </Switch>
+          </Router>
+        </HistoryContext.Provider>
       </div>
     </>
   );

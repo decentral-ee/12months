@@ -1,5 +1,5 @@
 import React from 'react';
-import {Router, Switch, Route} from 'react-router-dom';
+import {Router, Switch, Route, Link} from 'react-router-dom';
 import createBrowserHistory from "history/createBrowserHistory";
 import {HistoryContext} from './context';
 import Landing from './Landing';
@@ -17,7 +17,12 @@ function App () {
     <>
       <div className="container-fluid header">
         <div className="p-4 w-100 row">
-          <h1 className="logo text-left mt-0">12months</h1>
+          <h1 className="logo text-left mt-0">
+            <Link
+              to="/">
+              12months
+            </Link>
+          </h1>
         </div>
       </div>
       <div className="body container-fluid p-4">

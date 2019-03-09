@@ -1,5 +1,4 @@
 import React, {useState, useRef, useContext} from 'react';
-import {Dropdown} from './ui/dropdown';
 import {HistoryContext} from './context';
 import Image from './images/image.svg';
 import { FaUpload } from 'react-icons/fa';

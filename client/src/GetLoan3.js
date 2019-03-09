@@ -1,13 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {sign} from './id-card';
 import * as Web3Utils from 'web3-utils';
 import { FaFilePdf } from 'react-icons/fa';
 
+import {ApiContext} from './context';
+
 export default function GetLoan3(props) {
   const {location} = props;
   const {pdf, pdfBytes, vin, model, year, idNumber, ask, interest, term} = location.state;
+  const [signature, setSignature] = useState();
   const [downloaded, setDownloaded] = useState(false);
-  function handleSign() {
+  const apiURI = useContext(ApiContext);
+
+  async function handleSign() {
     const pdfHex = uint8ArrayToHex(pdfBytes);
     const pdfHash = Web3Utils.sha3(`0x${pdfHex}`).slice(2);
 
@@ -16,8 +21,33 @@ export default function GetLoan3(props) {
     //  const docHash = '413140d54372f9baf481d4c54e2d5c7bcf28fd6087000280e07976121dd54af2';
     try {
       const signature = await sign(pdfHash);
+      // const signature = { hex: 'asdasdasdasdasdasdsad' };
       console.log(`Signature! `, signature);
       setSignature(signature.hex);
+
+      // send files to the server
+      console.log(`Api! `, apiURI);
+      await fetch(`${apiURI}/api/deals`, {
+        // credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify({
+          files: [{
+            content: pdfHex,
+            name: 'contract.pdf.hex'
+          }, {
+            content: signature.hex,
+            name: 'contract.signature.hex'
+          }]
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(response => {
+        console.log(`Sent to the server!`, response.json());
+        return response.json();
+      }).catch(error => {
+        console.log(`Error while sending files!`, error);
+      });
     } catch (event) {
       console.log(`Signing failed!`, event);
     }

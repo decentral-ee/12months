@@ -1,7 +1,7 @@
 import React from 'react';
 import {Router, Switch, Route, Link} from 'react-router-dom';
 import createBrowserHistory from "history/createBrowserHistory";
-import {HistoryContext} from './context';
+import {HistoryContext, ApiContext} from './context';
 import Landing from './Landing';
 import GetLoan from './GetLoan';
 import GetInterest from './GetInterest';
@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
 const history = createBrowserHistory();
+const apiURI = process.env.REACT_APP_API_URI;
 
 function App () {
   return (
@@ -27,13 +28,15 @@ function App () {
       </div>
       <div className="body container-fluid p-4">
         <HistoryContext.Provider value={history}>
-          <Router history={history}>
-            <Switch>
-              <Route exact path="/" component={Landing} />
-              <Route path="/loan" component={GetLoan} />
-              <Route path="/interest" component={GetInterest} />
-            </Switch>
-          </Router>
+          <ApiContext.Provider value={apiURI}>
+            <Router history={history}>
+              <Switch>
+                <Route exact path="/" component={Landing} />
+                <Route path="/loan" component={GetLoan} />
+                <Route path="/interest" component={GetInterest} />
+              </Switch>
+            </Router>
+          </ApiContext.Provider>
         </HistoryContext.Provider>
       </div>
       <footer className="container-fluid text-center py-4">

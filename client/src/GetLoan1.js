@@ -68,18 +68,19 @@ export default function GetLoan1() {
   }
 
   function handleNext() {
-    console.log(`Data to upload! `, {
+    const data = {
       photo: photo,
       vin: vin,
       model: model,
       year: year
-    });
+    };
+    console.log(`Data to upload! `, data);
 
     // next page
     history.push({
       pathname: '/loan/2',
       state: {
-        data: ""
+        ...data
       }
     });
   }

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-pdf/renderer": "^1.4.0",
     "bootstrap": "^4.3.1",
     "classcat": "^3.2.5",
     "history": "^4.7.2",

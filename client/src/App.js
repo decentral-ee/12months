@@ -1,7 +1,8 @@
 import React from 'react';
 import {Router, Switch, Route, Link} from 'react-router-dom';
 import createBrowserHistory from "history/createBrowserHistory";
-import {HistoryContext, ApiContext} from './context';
+import {HistoryContext, ApiContext, Web3Context} from './context';
+import {useWeb3} from './useWeb3';
 import Landing from './Landing';
 import GetLoan from './GetLoan';
 import GetInterest from './GetInterest';
@@ -14,6 +15,8 @@ const history = createBrowserHistory();
 const apiURI = process.env.REACT_APP_API_URI;
 
 function App () {
+  const web3 = useWeb3();
+
   return (
     <Router history={history}>
       <>
@@ -30,11 +33,13 @@ function App () {
         <div className="body container-fluid p-4">
           <HistoryContext.Provider value={history}>
             <ApiContext.Provider value={apiURI}>
-              <Switch>
-                <Route exact path="/" component={Landing} />
-                <Route path="/loan" component={GetLoan} />
-                <Route path="/interest" component={GetInterest} />
-              </Switch>
+              <Web3Context.Provider value={web3}>
+                <Switch>
+                  <Route exact path="/" component={Landing} />
+                  <Route path="/loan" component={GetLoan} />
+                  <Route path="/interest" component={GetInterest} />
+                </Switch>
+              </Web3Context.Provider>
             </ApiContext.Provider>
           </HistoryContext.Provider>
         </div>

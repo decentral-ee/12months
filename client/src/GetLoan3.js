@@ -2,8 +2,9 @@ import React, {useState, useContext} from 'react';
 import {sign} from './id-card';
 import * as Web3Utils from 'web3-utils';
 import { FaFilePdf } from 'react-icons/fa';
-import {ApiContext} from './context';
+import {ApiContext, Web3Context} from './context';
 import {sendFiles} from './api';
+const CarLoadJson = require('../contracts/CarLoan.json').abi;
 
 export default function GetLoan3(props) {
   const {location} = props;
@@ -11,6 +12,7 @@ export default function GetLoan3(props) {
   const [signature, setSignature] = useState();
   const [downloaded, setDownloaded] = useState(false);
   const apiURI = useContext(ApiContext);
+  const web3 = useContext(Web3Context);
 
   async function handleSign() {
     const pdfHex = uint8ArrayToHex(pdfBytes);
@@ -18,9 +20,9 @@ export default function GetLoan3(props) {
 
     console.log(`PDF! Hash: ${pdfHash}, hex: `, pdfHex);
 
-    // const docHash = '413140d54372f9baf481d4c54e2d5c7bcf28fd6087000280e07976121dd54af2';
+    //  const docHash = '413140d54372f9baf481d4c54e2d5c7bcf28fd6087000280e07976121dd54af2';
     try {
-      // const signature = await sign(pdfHash);
+      //  const signature = await sign(pdfHash);
       const signature = { hex: 'a33635e931a1a3fb5b31b463ee5b46e78cf8fb45d2c48618e8d4668f19c9d4930287232ef39159086c9a848c541dc2784754146a91fa5987dd53e6577e531225be1f3f63873e03ecd012c326b116353233fdc6e7de2bf1ef3c84c0ff94dce3fd' };
       console.log(`Signature! `, signature);
       setSignature(signature.hex);
@@ -29,6 +31,13 @@ export default function GetLoan3(props) {
       console.log(`Starting to send files! Api: ${apiURI}`);
       const {dealId} = await sendFiles(apiURI, pdfHex, signature.hex);
       console.log(`Sent files! Deal id: ${dealId}`);
+
+      // mint the nft
+      const address = '';
+      const infoUrl = "http://12months.finance/storage/deals/cars/42/contract.pdf";
+      const contract = new web3.eth.Contract(CarLoadJson.abi, address);
+      const receipt = await contract.methods.mint(infoUrl).send();
+      console.log(`Minted NFT! Receipt: `, receipt);
     } catch (event) {
       console.log(`Signing failed!`, event);
     }

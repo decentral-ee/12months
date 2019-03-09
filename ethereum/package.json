@@ -13,6 +13,7 @@
     "truffle-flattener": "^1.2.10"
   },
   "scripts": {
+    "build": "npx truffle compile",
     "test": "npx truffle test"
   }
 }

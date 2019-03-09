@@ -91,8 +91,8 @@ export default function GetLoan1() {
 
   return (
     <>
-      <div className="header"></div>
       <div className="body">
+        <div className="card-title">Car Details:</div>
         <div className="form card mx-auto">
           <div className="photo card-img-top mb-3" style={{backgroundImage: `url(${photo})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
             <div className="upload">
@@ -109,7 +109,7 @@ export default function GetLoan1() {
                 <input
                   id="vin"
                   type="text"
-                  placeHolder=""
+                  placeholder="WBA5E5106GG071740"
                   className="form-control"
                   value={vin}
                   onChange={event => setVin(event.target.value)}
@@ -123,7 +123,7 @@ export default function GetLoan1() {
                   id="model"
                   type="text"
                   className="form-control"
-                  placeHolder="Ford Focus"
+                  placeholder="Ford Focus"
                   value={model}
                   onChange={event => setModel(event.target.value)}
                 />
@@ -146,7 +146,7 @@ export default function GetLoan1() {
                   id="year"
                   type="number"
                   className="form-control"
-                  placeHolder="2018"
+                  placeholder="2018"
                   value={year}
                   onChange={event => setYear(event.target.value)}
                 />

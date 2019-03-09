@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lato|Lobster|Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Lato|Lobster|Open+Sans|Patua+One');
 :root{
   --light: white;
   --blue: #003831;
@@ -7,22 +7,38 @@
   --light-blue: #00ae99;
   --dark: #181818;
 }
+html{ height:100%; }
+body{ min-height:100%; padding:0; margin:0; position:relative; }
+header{ height:50px; background:lightcyan; }
+footer{ background:PapayaWhip; }
 
-#root{
-  height: 100vh;
-  width: 100vw;
-}
-body{
+/* Trick: */
+body {
+ position: relative;
   font-family: 'Lato', sans-serif;
   background-color: var(--light);
+  margin: 0;
+  padding-bottom: 4rem;
+  min-height: 100%;
 }
+body::after {
+ content: '';
+ display: block;
+ height: 4rem; /* Set same as footer's height */
+}
+
+footer {
+  background-color: var(--dark);
+  color:var(--light);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 4rem;
+}
+
 .header{
   background-color: var(--darkest);
   color: var(--light);
-}
-.footer{
-  background-color: var(--dark);
-  color:var(--light);
 }
 .logo {
   margin-top:0;
@@ -30,13 +46,15 @@ body{
   font-family: 'Lobster', cursive;
 }
 h1,h2,h3,h4{
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Patua One', cursive;
 }
 .btn, button{
   background-color: var(--blue);
   color: var(--light);
+  border:none;
 }
 .btn:hover, button:hover{
+  background-color: var(--blue);
   color:var(--light) !important;
 }
 .highlight{
@@ -49,20 +67,68 @@ h1,h2,h3,h4{
 .landing .subheader {
     font-size: 2em;
 }
-.landing .btn{
-  height: 250px;
-  height:100%;
-  font-size: 3rem;
+.landing .blocks > div{
+  min-height:180px;
+  width: 300px;
+  background-color: var(--blue);
 }
+.landing .btn{
+  font-size: 3rem;
+  font-family: 'Patua One', sans-serif;
+}
+/************
+Card formatting
+*********/
+  .card{
+    background: var(--dark-blue);
+    color: var(--light);
+    max-width: 360px;
+  }
+  .card-title{
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+
 /********
  GetLoan1
 ********/
-.card{
-  background: var(--dark-blue);
-  color: var(--light);
-  max-width: 360px;
+.card .photo{
+  border: none;
+  height:200px;
+}
+/************
+ GetLoan2
+*********/
+input{
+  color: var(--dark);
+  text-align:right;
+}
+#getLoan2 .col-sm-8::after{
+  position: absolute;
+  top: 7px;
+  color: var(--dark);
 
 }
-.card .photo{
-  height:200px;
+#ask{
+  padding-right:41px;
+}
+.ask-input::after{
+  right: 25px;
+  content: 'DAI';
+}
+#interest{
+  padding-right:26px;
+}
+.interest-input::after{
+  right: 25px;
+  content: '%';
+}
+#term{
+  padding-right:66px;
+}
+.term-input::after{
+  right: 25px;
+  content: 'months';
 }

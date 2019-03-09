@@ -15,12 +15,11 @@ function App () {
   return (
     <>
       <div className="container-fluid header">
-        <div className="p-2 w-100 row">
+        <div className="p-4 w-100 row">
           <h1 className="logo text-left mt-0">12months</h1>
         </div>
       </div>
-      <div className="body container">
-        <h3 className="text-center d-inline">Instant Crypto Loans</h3>
+      <div className="body container-fluid p-4">
         <HistoryContext.Provider value={history}>
           <Router history={history}>
             <Switch>
@@ -30,6 +29,9 @@ function App () {
           </Router>
         </HistoryContext.Provider>
       </div>
+      <footer className="container-fluid text-center py-4">
+        <div>ETHParis - <a href="http://decentral.ee" target="_blank" rel="noopener noreferrer">decentral.ee</a> - 12months </div>
+      </footer>
     </>
   );
 }

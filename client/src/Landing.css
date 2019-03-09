@@ -1,0 +1,23 @@
+.landing {
+    display: flex;
+    flex-direction: column;
+}
+.landing .header {
+    text-align: center;
+    font-size: 4em;
+    margin-bottom: 0.5em;
+}
+.landing .body {
+    text-align: center;
+}
+.landing .subheader {
+    font-size: 2em;
+}
+.landing .blocks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.landing .block {
+    margin: 1em;
+}

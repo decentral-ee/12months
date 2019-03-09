@@ -5,7 +5,7 @@ import {FaFilePdf} from 'react-icons/fa';
 
 export default function Listing(props) {
   const {location} = props;
-  const {vin, model, year, id, ask, term, interest} = location.state;
+  const {vin, model, year, dealId, ask, term, interest} = location.state;
   const history = useContext(HistoryContext);
   const [photo, setPhoto] = useState(Image);
   const [contract, setContract] = useState();

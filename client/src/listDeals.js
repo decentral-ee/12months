@@ -5,7 +5,7 @@ export default function ListDeals() {
   const history = useContext(HistoryContext);
 
   function finance(deal){
-    const path = "/deal/" + deal.id;
+    const path = "/deal/" + deal.dealId;
     history.push({
       pathname: path,
       state: {
@@ -23,7 +23,7 @@ export default function ListDeals() {
      ask : "1000",
      interest : "10",
      term : "12",
-     id :"2222"
+     dealId :"2222"
     };
     const test2 = test;
     values.push(test);
@@ -52,7 +52,7 @@ export default function ListDeals() {
           </td>
           <td>
             <button
-              id={v.id}
+              id={v.dealId}
               className='finance'
               onClick={(e)=>finance(v)} >
               Finance!
@@ -82,6 +82,7 @@ export default function ListDeals() {
             {Tbody()}
           </tbody>
         </table>
+        <div>Check the vehicle's history by searching for the VIN in the <a href="https://eteenindus.mnt.ee/public/soidukTaustakontroll.jsf" target="_blank" rel="noopener noreferrer">Estonian Vehicle Registry</a> </div>
       </div>
     </>
   )

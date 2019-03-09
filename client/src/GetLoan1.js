@@ -1,8 +1,10 @@
 import React, {useState, useRef, useContext} from 'react';
 import {Dropdown} from './ui/dropdown';
+import {HistoryContext} from './context';
 
 export default function GetLoan1() {
-  const history = useContext();
+  const history = useContext(HistoryContext);
+  const [photo, setPhoto] = useState();
   const [vin, setVin] = useState();
   const [year, setYear] = useState();
   const [model, setModel] = useState({
@@ -17,7 +19,7 @@ export default function GetLoan1() {
     setModel({...model, selected: item, isOpen: false});
   }
 
-  // upload photo
+  //  upload photo
   const uploadFileInput = useRef(null);
   function handleUploadFile(event) {
     event.preventDefault();
@@ -30,36 +32,49 @@ export default function GetLoan1() {
     const input = uploadFileInput.current;
     input.click();
 
-    // register change listener as React onChange is not working for some reason
+    //  register change listener as React onChange is not working for some reason
     input.addEventListener('change', handleFilesSelected);
   }
 
   async function handleFilesSelected(event) {
-    // stop default events
+    //  stop default events
     event.preventDefault();
     event.stopPropagation();
     if (event.nativeEvent) {
       event.nativeEvent.stopImmediatePropagation();
     }
-
-    const files = event.target.files;
+    const files = fileListToFilesArray(event.target.files);
     const input = uploadFileInput.current;
-    console.log(`Uploading files: `, files);
+    // console.log(`Uploading files: `, files[0]);
 
     if (input) {
       input.value = '';
       input.removeEventListener('change', handleFilesSelected);
     }
 
-    // upload files
+    //  upload files
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      const fileBase64 = reader.result;
+      console.log(`File base64!  `, fileBase64);
+      setPhoto(fileBase64);
+    }, false);
+    reader.readAsDataURL(files[0]);
 
-    // put change listener back
+    //  put change listener back
     if (input) {
       input.addEventListener('change', handleFilesSelected);
     }
   }
 
   function handleNext() {
+    console.log(`Data to upload! `, {
+      photo: photo,
+      vin: vin,
+      model: model,
+      year: year
+    });
+
     // next page
     history.push({
       pathname: '/loan/2',
@@ -134,4 +149,13 @@ export default function GetLoan1() {
       </div>
     </>
   )
+}
+
+export function fileListToFilesArray(files) {
+  if (!files) { return null; }
+  const result = [];
+  for (let i = 0; i < files.length; i++) {
+    result.push(files[i]);
+  }
+  return result;
 }

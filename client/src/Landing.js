@@ -7,7 +7,7 @@ export default function Landing() {
     <div className="landing">
       <div className="blocks row">
         <div className="block col-md-6">
-          <Link className="btn btn-dark btn-lg btn-block" to="/loan">Get a loan</Link>
+          <Link className="btn btn-dark btn-lg btn-block" to="/loan/1">Get a loan</Link>
         </div>
         <div className="block col-md-6">
           <Link className="btn btn-dark btn-lg btn-block" to="/interest">Get Interest loan</Link>

@@ -1,4 +1,4 @@
-import React,  {useState, useContext, useRef} from 'react';
+import React, {useState} from 'react';
 import {sign} from './id-card';
 import * as Web3Utils from 'web3-utils';
 import { FaFilePdf } from 'react-icons/fa';
@@ -15,7 +15,9 @@ export default function GetLoan3(props) {
 
     //  const docHash = '413140d54372f9baf481d4c54e2d5c7bcf28fd6087000280e07976121dd54af2';
     try {
-      sign(pdfHash);
+      const signature = await sign(pdfHash);
+      console.log(`Signature! `, signature);
+      setSignature(signature.hex);
     } catch (event) {
       console.log(`Signing failed!`, event);
     }
@@ -60,6 +62,9 @@ export default function GetLoan3(props) {
               <label htmlFor="" className="col-sm-4 col-form-label"></label>
               <button type="button" disabled={!downloaded} className="btn btn-primary" onClick={handleSign}>Sign</button>
             </div>
+          </div>
+          <div className="form-group row">
+            {signature}
           </div>
         </div>
       </div>

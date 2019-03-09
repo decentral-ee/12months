@@ -3,6 +3,9 @@ import {Router, Switch, Route} from 'react-router-dom';
 import createBrowserHistory from "history/createBrowserHistory";
 import Landing from './Landing';
 import GetLoan from './GetLoan';
+
+// include all the css-es
+import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
 const history = createBrowserHistory();

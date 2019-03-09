@@ -25,7 +25,7 @@ function App () {
           <Router history={history}>
             <Switch>
               <Route exact path="/" component={Landing} />
-              <Route path="/loan/1" component={GetLoan} />
+              <Route path="/loan" component={GetLoan} />
             </Switch>
           </Router>
         </HistoryContext.Provider>

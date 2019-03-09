@@ -134,19 +134,6 @@ export default function GetLoan2(props) {
               <button type="button" className="btn btn-primary" onClick={handleNext}>Next</button>
             </div>
           </div>
-          <BlobProvider document={PdfDoc}>
-            {({ blob, url, loading, error }) => {
-              if (!blob) { return null; }
-              const reader = new FileReader(blob);
-              reader.readAsDataURL(blob);
-              reader.onloadend = function() {
-                const base64data = reader.result;
-                /* console.log(base64data); */
-                pdf.current = base64data;
-              }
-              return null;
-            }}
-          </BlobProvider>
         </div>
       </div>
       <BlobProvider document={PdfDoc}>

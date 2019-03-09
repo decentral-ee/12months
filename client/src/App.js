@@ -13,16 +13,20 @@ const history = createBrowserHistory();
 function App () {
   return (
     <>
-    <div className="header p-2 w-100">
-      <h1 className="logo text-left mt-0">12months</h1>
+    <div className="container header">
+      <div className="p-2 w-100 row">
+        <h1 className="logo text-left mt-0">12months</h1>
+      </div>
     </div>
-    <Router history={history}>
-      <Switch>
-        <Route exact path="/" component={Landing} />
-        <Route exact path="/loan" component={GetLoan} />
-      </Switch>
-    </Router>
-
+    <div className="body container">
+      <h3 className="text-center d-inline">Instant Crypto Loans</h3>
+      <Router history={history}>
+        <Switch>
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/loan" component={GetLoan} />
+        </Switch>
+      </Router>
+    </div>
     </>
   );
 }

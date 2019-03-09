@@ -1,34 +1,45 @@
 import React, {useState, useContext, useRef} from 'react';
 import {HistoryContext} from './context';
-import {Page, Text, View, Document, StyleSheet, BlobProvider} from '@react-pdf/renderer';
+import {Page, Text, View, Image, Document, StyleSheet, BlobProvider} from '@react-pdf/renderer';
 
 // Create styles
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',
-    backgroundColor: '#E4E4E4'
+    backgroundColor: '#ffffff',
+    margin: 10,
+    paddingTop: 35,
+    paddingBottom: 35,
+    paddingHorizontal: 35,
+  },
+  image: {
+    marginVertical: 15,
+    marginHorizontal: 100,
+  },
+  paragraph: {
+    marginTop: 10
   },
   section: {
     flexDirection: 'row',
-    margin: 10,
-    padding: 10,
     flexGrow: 1
   },
   column: {
     minWidth: 200,
+    maxWidth: '1200px',
     flexGrow: 0.5
   }
 });
 
 export default function GetLoan2(props) {
   const {location} = props;
-  const {photo, vin, model, year} = location.state;
+  const {photo, vin, model, year, idNumber} = location.state;
   const history = useContext(HistoryContext);
   const [ask, setAsk] = useState(500);
   const [interest, setInterest] = useState(10);
   const [term, setTerm] = useState(12);
   const pdf = useRef();
   const pdfBytes = useRef();
+  const today = new Date();
 
   function handleNext() {
     const data = {
@@ -36,6 +47,7 @@ export default function GetLoan2(props) {
       vin: vin,
       model: model,
       year: year,
+      idNumber: idNumber
     };
     console.log(`Data to upload! `, data);
 
@@ -49,6 +61,7 @@ export default function GetLoan2(props) {
         ask: ask,
         interest: interest,
         term: term,
+        idNumber: idNumber,
         pdf: pdf.current,
         pdfBytes: pdfBytes.current
       }
@@ -62,10 +75,13 @@ export default function GetLoan2(props) {
           <Text>Collateralized Loan Contract</Text>
         </View>
         <View style={styles.section}>
+          <Text>Post Date: {today.getDay()}/{today.getMonth()}/{today.getYear()}</Text>
+        </View>
+        <View style={styles.section}>
           <View style={styles.column}>
             <Text>Car Model: {model}</Text>
             <Text>Car year: {year}</Text>
-            <Text>Vin# : {vin}</Text>
+            <Text>VIN# : {vin}</Text>
           </View>
           <View style={styles.column}>
             <Text>Loan Amount: {ask}DAI</Text>
@@ -73,11 +89,22 @@ export default function GetLoan2(props) {
             <Text>Term: {term} days</Text>
           </View>
         </View>
-        <View style={styles.section}>
-          <Text>
-            If the loan indicated is not repayed by the term specified by this contract, the property of the vehicle listed above, of which I am the sole owner, will be transferred to the financer.
+        <View>
+          <Image
+            style={styles.image}
+            src={photo}
+          />
+        </View>
+        <View style={styles.column}>
+          <Text  style={styles.paragraph}   >
+            The parts of this contract are the two signatories.
+            The debtor is signer#1, personal ID number {idNumber}, owner of the vehicle.
+            The creditor is the second signer.
           </Text>
-          <Text>
+          <Text style={styles.paragraph}>
+            If the loan indicated is not repayed by the term specified by this contract, the property of the vehicle listed above, of which I am the sole owner, will be transferred to the creditor.
+          </Text>
+          <Text style={styles.paragraph}>
             Lorem ipsum dolor sit amet, tale munere qui in, ut sint soleat lucilius eam. Eu vivendo civibus accusamus pro, inimicus reprehendunt eam id. His ut alia debitis fastidii. Feugait urbanitas ex eum, sit in brute errem mediocritatem.
             At antiopam repudiandae nec. Ad his probo libris suscipit, ut vitae salutatus incorrupte sea, vel in quem magna regione. Ei nam esse platonem vulputate. Sed ei noluisse neglegentur, ad dico accumsan his, iuvaret diceret vituperatoribus usu cu. Ex perpetua oportere gloriatur pri, amet mentitum explicari ei eum.
             Qui utinam inermis no, ad tollit sadipscing his, dicant placerat in eum. Verear delectus vulputate te sed. Sea at erant ceteros reprehendunt, vim suas gloriatur ad. Vis ex ridens inciderint ullamcorper, est et noster nonumes indoctum, hinc indoctum cum ei. Cum altera facilisi scripserit eu, ancillae invenire ut has. Mea id simul ceteros, cu vel regione patrioque hendrerit.

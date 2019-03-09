@@ -132,3 +132,13 @@ input{
   right: 25px;
   content: 'months';
 }
+/***********
+*  GetLoan3
+**************/
+.getLoan3 .col-sm-8{
+  background-color: var(--blue);
+  border-radius: 8px;
+  margin: 7px 0;
+  height: 24px;
+  line-height: 24px;
+}

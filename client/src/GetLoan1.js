@@ -2,14 +2,15 @@ import React, {useState, useRef, useContext} from 'react';
 import {Dropdown} from './ui/dropdown';
 import {HistoryContext} from './context';
 import Image from './images/image.svg';
-import { FaUpload } from 'react-icons/fa'
+import { FaUpload } from 'react-icons/fa';
 
 export default function GetLoan1() {
   const history = useContext(HistoryContext);
   const [photo, setPhoto] = useState(Image);
-  const [vin, setVin] = useState();
-  const [year, setYear] = useState();
-  const [model, setModel] = useState();
+  const [vin, setVin] = useState("CR1PT0T0TH3M00N");
+  const [year, setYear] = useState("2017");
+  const [model, setModel] = useState("Rekt Lambo");
+  const [idNumber, setIdNumber] = useState("133713371337");
   /*
   const [model, setModel] = useState({
     items: [{code: 'VolvoXC90', label: 'Volvo XC90'}],
@@ -76,7 +77,8 @@ export default function GetLoan1() {
       photo: photo,
       vin: vin,
       model: model,
-      year: year
+      year: year,
+      idNumber: idNumber
     };
     console.log(`Data to upload! `, data);
 
@@ -149,6 +151,19 @@ export default function GetLoan1() {
                   placeholder="2018"
                   value={year}
                   onChange={event => setYear(event.target.value)}
+                />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label htmlFor="idNumber" className="col-sm-4 col-form-label">ID number</label>
+              <div className="col-sm-8">
+                <input
+                  id="idNumber"
+                  type="number"
+                  className="form-control"
+                  placeholder="90923209332"
+                  value={idNumber}
+                  onChange={event => setIdNumber(event.target.value)}
                 />
               </div>
             </div>

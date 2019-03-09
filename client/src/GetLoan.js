@@ -3,7 +3,6 @@ import {Route} from 'react-router-dom';
 import GetLoan1 from './GetLoan1';
 import GetLoan2 from './GetLoan2';
 import GetLoan3 from './GetLoan3';
-import './GetLoan.css';
 
 export default function GetLoan() {
   return (

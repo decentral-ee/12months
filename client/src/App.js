@@ -4,6 +4,7 @@ import createBrowserHistory from "history/createBrowserHistory";
 import {HistoryContext} from './context';
 import Landing from './Landing';
 import GetLoan from './GetLoan';
+import GetInterest from './GetInterest';
 
 // include all the css-es
 import 'bootstrap/dist/css/bootstrap.css';
@@ -25,6 +26,7 @@ function App () {
             <Switch>
               <Route exact path="/" component={Landing} />
               <Route path="/loan" component={GetLoan} />
+              <Route path="/interest" component={GetInterest} />
             </Switch>
           </Router>
         </HistoryContext.Provider>

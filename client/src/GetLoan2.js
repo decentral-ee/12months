@@ -74,6 +74,8 @@ export default function GetLoan2(props) {
         <View style={styles.section}>
           <Text>
             If the loan indicated is not repayed by the term specified by this contract, the property of the vehicle listed above, of which I am the sole owner, will be transferred to the financer.
+          </Text>
+          <Text>
             Lorem ipsum dolor sit amet, tale munere qui in, ut sint soleat lucilius eam. Eu vivendo civibus accusamus pro, inimicus reprehendunt eam id. His ut alia debitis fastidii. Feugait urbanitas ex eum, sit in brute errem mediocritatem.
             At antiopam repudiandae nec. Ad his probo libris suscipit, ut vitae salutatus incorrupte sea, vel in quem magna regione. Ei nam esse platonem vulputate. Sed ei noluisse neglegentur, ad dico accumsan his, iuvaret diceret vituperatoribus usu cu. Ex perpetua oportere gloriatur pri, amet mentitum explicari ei eum.
             Qui utinam inermis no, ad tollit sadipscing his, dicant placerat in eum. Verear delectus vulputate te sed. Sea at erant ceteros reprehendunt, vim suas gloriatur ad. Vis ex ridens inciderint ullamcorper, est et noster nonumes indoctum, hinc indoctum cum ei. Cum altera facilisi scripserit eu, ancillae invenire ut has. Mea id simul ceteros, cu vel regione patrioque hendrerit.

@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {sign} from './id-card';
 import * as Web3Utils from 'web3-utils';
 
 export default function GetLoan3(props) {
   const {location} = props;
   const {pdf, pdfBytes, vin, model, year, ask, interest, term} = location.state;
+  const [signature, setSignature] = useState();
 
-  function handleSign() {
+  async function handleSign() {
     const pdfHex = uint8ArrayToHex(pdfBytes);
     const pdfHash = Web3Utils.sha3(`0x${pdfHex}`).slice(2);
 
@@ -14,7 +15,9 @@ export default function GetLoan3(props) {
 
     //  const docHash = '413140d54372f9baf481d4c54e2d5c7bcf28fd6087000280e07976121dd54af2';
     try {
-      sign(pdfHash);
+      const signature = await sign(pdfHash);
+      console.log(`Signature! `, signature);
+      setSignature(signature.hex);
     } catch (event) {
       console.log(`Signing failed!`, event);
     }
@@ -54,6 +57,9 @@ export default function GetLoan3(props) {
             <div className="col-sm-8">
               <button type="button" className="btn btn-primary" onClick={handleSign}>Sign</button>
             </div>
+          </div>
+          <div className="form-group row">
+            {signature}
           </div>
         </div>
       </div>

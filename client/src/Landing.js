@@ -5,7 +5,6 @@ import './Landing.css';
 export default function Landing() {
   return (
     <div className="landing">
-      <div className="header">12 Months</div>
       <div className="body">
         <div className="subheader">Instant Crypto Loans</div>
         <div className="blocks">

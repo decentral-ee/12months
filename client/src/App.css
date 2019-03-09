@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css?family=Lato|Lobster|Open+Sans');
+#root{
+  height: 100vh;
+  width: 100vw;
+}
+body{
+  font-family: 'Lato', sans-serif;
+  background-color: white;
+}
+.header{
+  background-color: black;
+  color: white;
+}
+.logo {
+  margin-top:0;
+  font-size: 3rem;
+  font-family: 'Lobster', cursive;
+}
+h1,h2,h3,h4{
+  font-family: 'Open Sans', sans-serif;
+}

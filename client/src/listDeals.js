@@ -18,8 +18,31 @@ export default function GetLoan1() {
       }
     });
   }
-  const Tbody=(params)=>{
-    
+  const Tbody=()=>{
+    const values = [];
+    const html = '';
+    values.forEach(v => {
+      let row =
+        "<tr className='row'><td>"
+        +
+        +"</td><td>"
+        +
+        +"</td><td>"
+        +
+        +"</td><td>"
+        +
+        +"</td><td>"
+        +
+        +"</td><td>"
+        +
+        +"</td><td>"
+        +
+        +"</td><td>"
+        +
+        +"</td></tr>";
+      html.push(row);
+    });
+    return html;
   }
   return (
     <>
@@ -36,9 +59,7 @@ export default function GetLoan1() {
               <th>Term</th>
             </tr>
           </thead>
-          <Tbody>
-
-          </Tbody>
+          {Tbody()}
         </table>
       </div>
     </>

@@ -28,6 +28,7 @@ export default function GetLoan2(props) {
   const [interest, setInterest] = useState(10);
   const [term, setTerm] = useState(12);
   const pdf = useRef();
+  const pdfBytes = useRef();
 
   function handleNext() {
     const data = {
@@ -48,7 +49,8 @@ export default function GetLoan2(props) {
         ask: ask,
         interest: interest,
         term: term,
-        pdf: pdf.current
+        pdf: pdf.current,
+        pdfBytes: pdfBytes.current
       }
     });
   }
@@ -147,6 +149,24 @@ export default function GetLoan2(props) {
           </BlobProvider>
         </div>
       </div>
+      <BlobProvider document={PdfDoc}>
+        {({ blob, url, loading, error }) => {
+          if (!blob) { return null; }
+          const reader = new FileReader(blob);
+          reader.readAsDataURL(blob);
+          reader.onloadend = function() {
+            const base64data = reader.result;
+            pdf.current = base64data;
+          }
+          const reader2 = new FileReader(blob);
+          reader2.readAsArrayBuffer(blob);
+          reader2.onloadend = function() {
+            const arrayBuffer = reader2.result;
+            pdfBytes.current = new Uint8Array(arrayBuffer);
+          }
+          return null;
+        }}
+      </BlobProvider>
     </>
   );
 }

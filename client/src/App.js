@@ -13,20 +13,23 @@ const history = createBrowserHistory();
 function App () {
   return (
     <>
-    <div className="container header">
-      <div className="p-2 w-100 row">
-        <h1 className="logo text-left mt-0">12months</h1>
+      <div className="container-fluid header">
+        <div className="p-2 w-100 row">
+          <h1 className="logo text-left mt-0">12months</h1>
+        </div>
       </div>
-    </div>
-    <div className="body container">
-      <h3 className="text-center d-inline">Instant Crypto Loans</h3>
-      <Router history={history}>
-        <Switch>
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/loan" component={GetLoan} />
-        </Switch>
-      </Router>
-    </div>
+      <div className="body container">
+        <h1 className="text-center my-3">Instant Crypto Loans</h1>
+        <Router history={history}>
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/loan" component={GetLoan} />
+          </Switch>
+        </Router>
+      </div>
+      <div className="footer">
+        <div className="text-center">ETHParis - 12months team - <a href="http://decentral.ee" target="_blank" rel="noopener noreferrer">decentral.ee</a></div>
+      </div>
     </>
   );
 }

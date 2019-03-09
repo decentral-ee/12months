@@ -11,5 +11,7 @@
 module.exports.routes = {
 
   'POST /api/deals': { action: 'deals/create' },
-  'POST /api/deals/:deal_id/buyer-signature': { action: 'deals/update-buyer-signature' }
+  'POST /api/deals/:deal_id/buyer-signature': { action: 'deals/update-buyer-signature' },
+  'GET  /api/deals/:deal_id': { action: "deals/get" },
+  'GET  /api/deals/:deal_id/:filename': { action: "deals/get-file", skipAssets: false },
 };

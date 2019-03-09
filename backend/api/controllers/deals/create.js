@@ -29,7 +29,8 @@ module.exports = {
     const dealStorageDir = path.join(sails.config.custom.storageDirectory, deal.id.toString());
     fs.mkdirSync(dealStorageDir);
 
-    _.forEach(inputs.files, (content, name) => {
+    _.forEach(inputs.files, ({content, name}) => {
+      sails.log.verbose(`Received file! name: ${name}, content: `, content);
       const fileName = path.join(dealStorageDir, name);
       fs.writeFileSync(fileName, content);
     });

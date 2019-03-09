@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {Dropdown} from './ui/dropdown';
 import './GetLoan.css';
 
@@ -17,6 +17,48 @@ export default function GetLoan() {
     setModel({...model, selected: item, isOpen: false});
   }
 
+  // upload photo
+  const uploadFileInput = useRef(null);
+  function handleUploadFile(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.nativeEvent) {
+      event.nativeEvent.stopImmediatePropagation();
+    }
+
+    if (!uploadFileInput.current) { return; }
+    const input = uploadFileInput.current;
+    input.click();
+
+    // register change listener as React onChange is not working for some reason
+    input.addEventListener('change', handleFilesSelected);
+  }
+
+  async function handleFilesSelected(event) {
+    // stop default events
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.nativeEvent) {
+      event.nativeEvent.stopImmediatePropagation();
+    }
+
+    const files = event.target.files;
+    const input = uploadFileInput.current;
+    console.log(`Uploading files: `, files);
+
+    if (input) {
+      input.value = '';
+      input.removeEventListener('change', handleFilesSelected);
+    }
+
+    // upload files
+
+    // put change listener back
+    if (input) {
+      input.addEventListener('change', handleFilesSelected);
+    }
+  }
+
   function handleSubmit() {
 
   }
@@ -30,7 +72,12 @@ export default function GetLoan() {
             <label htmlFor="vin" className="col-sm-2 col-form-label"></label>
             <div className="col-sm-5">
               <div className="photo">
-                Upload Photo
+                <div className="upload">
+                  <button type="button" className="btn btn-primary" onClick={handleUploadFile}>
+                    Upload Photo
+                  </button>
+                  <input ref={uploadFileInput} type="file" style={{display: 'none'}} />
+                </div>
               </div>
             </div>
           </div>

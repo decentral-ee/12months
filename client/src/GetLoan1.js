@@ -1,12 +1,16 @@
 import React, {useState, useRef, useContext} from 'react';
 import {Dropdown} from './ui/dropdown';
 import {HistoryContext} from './context';
+import Image from './images/image.svg';
+import { FaUpload } from 'react-icons/fa'
 
 export default function GetLoan1() {
   const history = useContext(HistoryContext);
-  const [photo, setPhoto] = useState();
+  const [photo, setPhoto] = useState(Image);
   const [vin, setVin] = useState();
   const [year, setYear] = useState();
+  const [model, setModel] = useState();
+  /*
   const [model, setModel] = useState({
     items: [{code: 'VolvoXC90', label: 'Volvo XC90'}],
     isOpen: false,
@@ -17,7 +21,7 @@ export default function GetLoan1() {
   }
   function handleModelSelect(event, item) {
     setModel({...model, selected: item, isOpen: false});
-  }
+  }*/
 
   //  upload photo
   const uploadFileInput = useRef(null);
@@ -88,61 +92,70 @@ export default function GetLoan1() {
     <>
       <div className="header"></div>
       <div className="body">
-        <div className="form">
-          <div className="form-group row">
-            <label htmlFor="vin" className="col-sm-2 col-form-label"></label>
-            <div className="col-sm-5">
-              <div className="photo" style={{backgroundImage: `url(${photo})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
-                <div className="upload">
-                  <button type="button" className="btn btn-primary" onClick={handleUploadFile}>
-                    Upload Photo
-                  </button>
-                  <input ref={uploadFileInput} type="file" style={{display: 'none'}} />
-                </div>
+        <div className="form card mx-auto">
+          <div className="photo card-img-top mb-3" style={{backgroundImage: `url(${photo})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
+            <div className="upload">
+              <button type="button" className="float-right btn btn-primary" onClick={handleUploadFile}>
+                <FaUpload />
+              </button>
+              <input ref={uploadFileInput} type="file" style={{display: 'none'}} />
+            </div>
+          </div>
+          <div className="px-4">
+            <div className="form-group row">
+              <label htmlFor="vin" className="col-sm-4 col-form-label">VIN</label>
+              <div className="col-sm-8">
+                <input
+                  id="vin"
+                  type="text"
+                  placeHolder=""
+                  className="form-control"
+                  value={vin}
+                  onChange={event => setVin(event.target.value)}
+                />
               </div>
             </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="vin" className="col-sm-2 col-form-label">VIN</label>
-            <div className="col-sm-5">
-              <input
-                id="vin"
-                type="text"
-                className="form-control"
-                value={vin}
-                onChange={event => setVin(event.target.value)}
-              />
+            <div className="form-group row">
+              <label htmlFor="model" className="col-sm-4 col-form-label">Model</label>
+              <div className="col-sm-8">
+                <input
+                  id="model"
+                  type="text"
+                  className="form-control"
+                  placeHolder="Ford Focus"
+                  value={model}
+                  onChange={event => setModel(event.target.value)}
+                />
+                {/*
+                  <Dropdown
+                    label='Select'
+                    items={model.items}
+                    selected={model.selected}
+                    isOpen={model.isOpen}
+                    onClick={handleModelClick}
+                    onSelect={handleModelSelect}
+                  />
+                  */}
+              </div>
             </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="model" className="col-sm-2 col-form-label">Model</label>
-            <div className="col-sm-3">
-              <Dropdown
-                label='Select'
-                items={model.items}
-                selected={model.selected}
-                isOpen={model.isOpen}
-                onClick={handleModelClick}
-                onSelect={handleModelSelect}
-              />
+            <div className="form-group row">
+              <label htmlFor="vin" className="col-sm-4 col-form-label">Year</label>
+              <div className="col-sm-8">
+                <input
+                  id="year"
+                  type="number"
+                  className="form-control"
+                  placeHolder="2018"
+                  value={year}
+                  onChange={event => setYear(event.target.value)}
+                />
+              </div>
             </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="vin" className="col-sm-2 col-form-label">Year</label>
-            <div className="col-sm-5">
-              <input
-                id="year"
-                type="text"
-                className="form-control"
-                value={year}
-                onChange={event => setYear(event.target.value)}
-              />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="vin" className="col-sm-2 col-form-label"></label>
-            <div className="col-sm-5">
-              <button type="button" className="btn btn-primary" onClick={handleNext}>Next</button>
+            <div className="form-group row">
+              <label htmlFor="vin" className="col-sm-4 col-form-label"></label>
+              <div className="col-sm-8">
+                <button type="button" className="btn btn-primary" onClick={handleNext}>Next</button>
+              </div>
             </div>
           </div>
         </div>

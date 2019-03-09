@@ -3,6 +3,7 @@
   --light: white;
   --blue: #003831;
   --darkest: black;
+  --dark-blue: #111a19;
   --light-blue: #00ae99;
   --dark: #181818;
 }
@@ -38,6 +39,30 @@ h1,h2,h3,h4{
 .btn:hover, button:hover{
   color:var(--light) !important;
 }
-.btn.highlight, button.highlight{
+.highlight{
   color: var(--light-blue);
+}
+
+/*****
+  Landing page stuff
+****/
+.landing .subheader {
+    font-size: 2em;
+}
+.landing .btn{
+  height: 250px;
+  height:100%;
+  font-size: 3rem;
+}
+/********
+ GetLoan1
+********/
+.card{
+  background: var(--dark-blue);
+  color: var(--light);
+  max-width: 360px;
+
+}
+.card .photo{
+  height:200px;
 }

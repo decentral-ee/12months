@@ -92,7 +92,7 @@ export default function GetLoan1() {
           <div className="form-group row">
             <label htmlFor="vin" className="col-sm-2 col-form-label"></label>
             <div className="col-sm-5">
-              <div className="photo">
+              <div className="photo" style={{backgroundImage: `url(${photo})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
                 <div className="upload">
                   <button type="button" className="btn btn-primary" onClick={handleUploadFile}>
                     Upload Photo

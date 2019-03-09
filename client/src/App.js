@@ -15,7 +15,7 @@ const history = createBrowserHistory();
 const apiURI = process.env.REACT_APP_API_URI;
 
 function App () {
-  const web3 = useWeb3();
+  const [web3, ethereum] = useWeb3();
 
   return (
     <Router history={history}>
@@ -34,7 +34,7 @@ function App () {
         <div className="body container-fluid p-4">
           <HistoryContext.Provider value={history}>
             <ApiContext.Provider value={apiURI}>
-              <Web3Context.Provider value={web3}>
+              <Web3Context.Provider value={{web3, ethereum}}>
                 <Switch>
                   <Route exact path="/" component={Landing} />
                   <Route path="/loan" component={GetLoan} />

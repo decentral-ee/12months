@@ -4,7 +4,7 @@ import * as Web3Utils from 'web3-utils';
 import { FaFilePdf } from 'react-icons/fa';
 import {ApiContext, Web3Context} from './context';
 import {sendFiles} from './api';
-const CarLoadJson = require('../contracts/CarLoan.json').abi;
+const CarLoadJson = require('./contracts/CarLoan.json');
 
 export default function GetLoan3(props) {
   const {location} = props;
@@ -12,7 +12,7 @@ export default function GetLoan3(props) {
   const [signature, setSignature] = useState();
   const [downloaded, setDownloaded] = useState(false);
   const apiURI = useContext(ApiContext);
-  const web3 = useContext(Web3Context);
+  const {web3, ethereum} = useContext(Web3Context);
 
   async function handleSign() {
     const pdfHex = uint8ArrayToHex(pdfBytes);
@@ -33,11 +33,11 @@ export default function GetLoan3(props) {
       console.log(`Sent files! Deal id: ${dealId}`);
 
       // mint the nft
-      const address = '';
-      const infoUrl = "http://12months.finance/storage/deals/cars/42/contract.pdf";
-      const contract = new web3.eth.Contract(CarLoadJson.abi, address);
-      const receipt = await contract.methods.mint(infoUrl).send();
-      console.log(`Minted NFT! Receipt: `, receipt);
+      if (ethereum) {
+        await ethereum.enable();
+      }
+      const txHash = await mintNFT(web3, dealId);
+      console.log(`NFT Minted! hash: ${txHash}`);
     } catch (event) {
       console.log(`Signing failed!`, event);
     }
@@ -98,4 +98,22 @@ function uint8ArrayToHex(uint8Arr) {
     result += uint8Arr[i].toString(16);
   }
   return result;
+}
+
+function mintNFT(web3, dealId) {
+  return new Promise(async (resolve, reject) => {
+    const accounts = await web3.eth.getAccounts();
+    const address = '0x1bEA84E2e81d2B206c63Eb74Fc81C88D9e59eb16'; // kovan
+    const infoUrl = `https://local2.oja.me/api/deals/${dealId}/contract.pdf.hex`;
+    const contract = new web3.eth.Contract(CarLoadJson.abi, address);
+    contract.methods.mint(infoUrl).send({from: accounts[0]}).on('receipt', receipt => {
+      console.log(`Minted NFT! receipt: `, receipt);
+    }).on('transactionHash', hash => {
+      console.log(`Minted NFT! hash! `, hash);
+      resolve(hash);
+    }).catch(error => {
+      console.error(error);
+      reject(error);
+    });
+  });
 }

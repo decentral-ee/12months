@@ -1,45 +1,64 @@
-import React, {useState, useRef, useContext} from 'react';
-import {Dropdown} from './ui/dropdown';
+import React, {useState, useContext} from 'react';
 import {HistoryContext} from './context';
-import Image from './images/image.svg';
-import { FaUpload } from 'react-icons/fa';
 
-export default function GetLoan1() {
+export default function ListDeals() {
   const history = useContext(HistoryContext);
 
-  function handleNext() {
-    const data = {
-    };
-    // next page
+  function finance(deal){
+    const path = "/deal/" + deal.id;
     history.push({
-      pathname: '/deal/',
+      pathname: path,
       state: {
-        ...data
+        ...deal
       }
     });
   }
+
   const Tbody=()=>{
     const values = [];
-    const html = '';
+    const test = {
+     vin : 'CR1PT0T0TH3M00N',
+     year :"2017",
+     model : "Rekt Lambo",
+     ask : "1000",
+     interest : "10",
+     term : "12",
+     id :"2222"
+    };
+    const test2 = test;
+    values.push(test);
+    values.push(test2);
+    var html = [];
     values.forEach(v => {
       let row =
-        "<tr className='row'><td>"
-        +
-        +"</td><td>"
-        +
-        +"</td><td>"
-        +
-        +"</td><td>"
-        +
-        +"</td><td>"
-        +
-        +"</td><td>"
-        +
-        +"</td><td>"
-        +
-        +"</td><td>"
-        +
-        +"</td></tr>";
+        <tr className=''>
+          <th  scope="row">
+            {v.model}
+          </th>
+          <td>
+            {v.year}
+          </td>
+          <td>
+            {v.vin}
+          </td>
+          <td>
+            {v.ask}
+          </td>
+          <td>
+            {v.interest}
+          </td>
+          <td>
+            {v.term}
+          </td>
+          <td>
+            <button
+              id={v.id}
+              className='finance'
+              onClick={(e)=>finance(v)} >
+              Finance!
+            </button>
+          </td>
+        </tr>;
       html.push(row);
     });
     return html;
@@ -48,7 +67,7 @@ export default function GetLoan1() {
     <>
       <div className="body">
         <div className="card-title">List Deals:</div>
-        <table class="table table-striped">
+        <table className="table table-striped">
           <thead>
             <tr>
               <th>Car Name</th>
@@ -59,18 +78,11 @@ export default function GetLoan1() {
               <th>Term</th>
             </tr>
           </thead>
-          {Tbody()}
+          <tbody>
+            {Tbody()}
+          </tbody>
         </table>
       </div>
     </>
   )
-}
-
-export function fileListToFilesArray(files) {
-  if (!files) { return null; }
-  const result = [];
-  for (let i = 0; i < files.length; i++) {
-    result.push(files[i]);
-  }
-  return result;
 }

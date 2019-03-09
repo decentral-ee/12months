@@ -4,8 +4,8 @@ import createBrowserHistory from "history/createBrowserHistory";
 import {HistoryContext, ApiContext} from './context';
 import Landing from './Landing';
 import GetLoan from './GetLoan';
-import GetInterest from './GetInterest';
-
+import ListDeals from './listDeals';
+import Listing from './listing';
 // include all the css-es
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
@@ -19,8 +19,9 @@ function App () {
       <>
         <div className="container-fluid header">
           <div className="p-4 w-100 row">
-            <h1 className="logo text-left mt-0">
+            <h1 className="text-left mt-0">
               <Link
+                className="logo"
                 to="/">
                 12months
               </Link>
@@ -33,7 +34,8 @@ function App () {
               <Switch>
                 <Route exact path="/" component={Landing} />
                 <Route path="/loan" component={GetLoan} />
-                <Route path="/interest" component={GetInterest} />
+                <Route path="/listdeals" component={ListDeals} />
+                <Route path="/deal" component={Listing} />
               </Switch>
             </ApiContext.Provider>
           </HistoryContext.Provider>

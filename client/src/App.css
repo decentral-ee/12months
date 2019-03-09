@@ -44,6 +44,13 @@ footer {
   margin-top:0;
   font-size: 3rem;
   font-family: 'Lobster', cursive;
+  text-decoration: none !important;
+  color: var(--light);
+}
+.logo:hover{
+  text-decoration: none !important;
+  color: var(--light-blue);
+  text-shadow:1px 1px 1px var(--light);
 }
 h1,h2,h3,h4{
   font-family: 'Patua One', cursive;

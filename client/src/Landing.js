@@ -17,7 +17,7 @@ export default function Landing() {
         <div className="d-flex align-items-stretch m-2 justify-content-center">
           <Link
             className="btn btn-lg m-2 p-2 highlight d-flex align-self-center text-center"
-            to="/interest">
+            to="/listdeals">
             12month<br />INTEREST
           </Link>
         </div>

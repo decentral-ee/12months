@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import {HistoryContext} from './context';
 
 export default function ListDeals() {
@@ -17,13 +17,13 @@ export default function ListDeals() {
   const Tbody=()=>{
     const values = [];
     const test = {
-     vin : 'CR1PT0T0TH3M00N',
-     year :"2017",
-     model : "Rekt Lambo",
-     ask : "1000",
-     interest : "10",
-     term : "12",
-     dealId :"2222"
+      vin : 'CR1PT0T0TH3M00N',
+      year :"2017",
+      model : "Rekt Lambo",
+      ask : "1000",
+      interest : "10",
+      term : "12",
+      dealId :"2222"
     };
     const test2 = test;
     values.push(test);
@@ -31,34 +31,19 @@ export default function ListDeals() {
     var html = [];
     values.forEach(v => {
       let row =
-        <tr className=''>
-          <th  scope="row">
-            {v.model}
-          </th>
-          <td>
-            {v.year}
-          </td>
-          <td>
-            {v.vin}
-          </td>
-          <td>
-            {v.ask}
-          </td>
-          <td>
-            {v.interest}
-          </td>
-          <td>
-            {v.term}
-          </td>
-          <td>
-            <button
-              id={v.dealId}
-              className='finance'
-              onClick={(e)=>finance(v)} >
-              Finance!
-            </button>
-          </td>
-        </tr>;
+          <tr className=''>
+            <th  scope="row">{v.model}</th>
+            <td>{v.year}</td>
+            <td>{v.vin}</td>
+            <td>{v.ask}</td>
+            <td>{v.interest}</td>
+            <td>{v.term}</td>
+            <td>
+              <button id={v.dealId} className='finance' onClick={(e)=>finance(v)}>
+                Finance!
+              </button>
+            </td>
+          </tr>;
       html.push(row);
     });
     return html;

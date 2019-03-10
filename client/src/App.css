@@ -70,6 +70,20 @@ h1,h2,h3,h4{
 .highlight{
   color: var(--light-blue);
 }
+.text-right {
+    display: flex;
+    justify-content: flex-end;
+}
+.text-right .account-info {
+    display: flex;
+    flex-direction: column;
+}
+.text-right .account-info .account {
+    margin: 0 !important;
+}
+.text-right .account-info .account.balance {
+    text-align: start;
+}
 
 /*****
   Landing page stuff

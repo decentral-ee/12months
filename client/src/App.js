@@ -79,8 +79,10 @@ function App () {
             </h1>
           </div>
           <div className="p-4 my-auto col text-right">
-            <h3 className="account d-inline mt-4">{daiBalance}</h3>
-            <h3 className="account d-inline mb-4">{account && account.substr(0,6)}...{account && account.substr(38 , 42)}</h3>
+            <div className="account-info">
+              <h3 className="account d-inline mt-4 balance">{daiBalance} ETH</h3>
+              <h3 className="account d-inline mb-4">{account && account.substr(0,6)}...{account && account.substr(38 , 42)}</h3>
+            </div>
             {myBlockies()}
           </div>
         </div>

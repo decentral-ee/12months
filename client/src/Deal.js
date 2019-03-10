@@ -60,8 +60,6 @@ export default function Deal(props) {
     <>
       <div className="body">
         <div className="card-title">Car Details:</div>
-        <div id="frontWheel" class="wheels" style={{position: 'absolute', top: '128px' ,width: '38px', right: '173px'}} dangerouslySetInnerHTML={{__html : svg}}  ></div>
-        <div id="backWheel" class="wheels" style={{position: 'absolute', top: '127px' ,width: '38px', right: '43px'}} dangerouslySetInnerHTML={{__html : svg}}  ></div>
         <div className="form card mx-auto">
           <div className="photo card-img-top mb-3" style={{backgroundImage: `url(${photo})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
           </div>

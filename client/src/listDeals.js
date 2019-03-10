@@ -9,7 +9,7 @@ export default function ListDeals() {
   const {deals} = useLoadDeals(apiURI);
 
   function finance(deal){
-    const path = "/deal/" + deal.dealId;
+    const path = "/deal/" + deal.id;
     history.push({
       pathname: path,
       state: {
@@ -38,10 +38,10 @@ export default function ListDeals() {
               <tr><td>Loading ...</td></tr>
             )}
             {deals && deals.map(v => {
-              if (!v.model) { return null; }
+              if (!v.zxOrder || !v.zxOrderSignature) { return null; }
               return (
                 <tr className=''>
-                  <th  scope="row">{v.model}</th>
+                  <th scope="row">{v.model}</th>
                   <td>{v.year}</td>
                   <td>{v.vin}</td>
                   <td>{v.ask}</td>

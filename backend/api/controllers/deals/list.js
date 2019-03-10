@@ -1,6 +1,3 @@
-const fs = require('fs');
-const path = require('path');
-
 module.exports = {
   friendlyName: 'Get the deals',
 
@@ -18,7 +15,7 @@ module.exports = {
     const T='api-deals-list';
     sails.log(`${T} requested`);
 
-    const deals = await Deal.find();
+    const deals = await Deal.find().sort('id DESC');
     console.log(`Deals: `, deals.length);
 
     exits.success({

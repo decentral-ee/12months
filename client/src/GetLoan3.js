@@ -4,9 +4,8 @@ import * as Web3Utils from 'web3-utils';
 import { FaFilePdf, FaSpinner, FaExclamationTriangle, FaCheckCircle } from 'react-icons/fa';
 import {HistoryContext} from './context';
 import {ApiContext, Web3Context} from './context';
-import {sendFiles} from './api';
-import {Contracts, CAR_LOAN} from './contracts';
-const uuidv4 = require('uuid/v4');
+import {createDeal, updateDeal} from './api';
+import {mintNFT, signOrder, approvalForAllAsync} from './zerox';
 
 export default function GetLoan3(props) {
   const {location} = props;
@@ -38,8 +37,12 @@ export default function GetLoan3(props) {
       console.log(`Starting to send files! Api: ${apiURI}`);
       setStatus('uploading contract...');
       setLoading(2);
-        const {dealId} = await sendFiles(apiURI, pdfHex, signature.hex, location.state);
+      const {dealId} = await createDeal(apiURI, pdfHex, signature.hex, location.state);
       console.log(`Sent files! Deal id: ${dealId}`);
+
+      const accounts = await web3.eth.getAccounts();
+      const from = accounts[0];
+      console.log(`My account: ${from}`);
 
       // mint the nft
       setStatus('Please Sign on Metamask');
@@ -47,19 +50,30 @@ export default function GetLoan3(props) {
       if (ethereum) {
         await ethereum.enable();
       }
-      const {tokenId, txHash} = await mintNFT(web3, dealId);
+      const {tokenId, txHash} = await mintNFT(web3, from, dealId);
       console.log(`NFT Minted! hash: ${txHash}, tokenId: ${tokenId}`);
+
+      // sign the order
+      const {zxOrder, zxSignature} = await signOrder(web3, from, tokenId);
+      console.log(`NFT order signed! signedOrder: ${zxSignature}`);
+      await updateDeal(apiURI, dealId, {
+        zxOrderSignature: zxSignature,
+        zxOrder: zxOrder
+      });
+
+      approvalForAllAsync(from);
+
       setLoading(4);
       setStatus('Transaction successful');
       setTimeout(()=>{
-        handleSuccess(dealId);
+        handleSuccess(dealId, tokenId, txHash);
       },6000);
     } catch (event) {
       console.log(`Signing failed!`, event);
     }
   }
 
-  function handleSuccess(dealId) {
+  function handleSuccess(dealId, tokenId, txHash) {
     const data = {
       success: true,
       photo: photo,
@@ -70,11 +84,13 @@ export default function GetLoan3(props) {
       interest: interest,
       term: term,
       pdf: pdf.current,
-      pdfBytes: pdfBytes.current
+      pdfBytes: pdfBytes.current,
+      tokenId,
+      txHash
     };
 
     // next page -> listing page with extra custom message
-    const path = '/listing/'+dealId;
+    const path = '/deal/'+dealId;
     history.push({
       pathname: path,
       state: {
@@ -124,28 +140,28 @@ export default function GetLoan3(props) {
             </div>
           </div>
           {loading>0
-            && (<div id="status" className={
-              loading <2
-              ? "text-danger"
-              : (loading === 2
-                ? "text-warning"
-                : (loading>3
-                  ? "text-success"
-                  : "text-danger"
-                  )
-                )
-              }>
-            {status}
-            {loading === 2
-            ? <FaSpinner className="ml-2 fa-spin faa-spin animated"/>
-            : (
-              loading === 3 || loading === 1
-              ? <FaExclamationTriangle className="ml-2"  />
-              : <FaCheckCircle className="ml-2" />
-              )
-            }
-            </div>)
-           }
+           && (<div id="status" className={
+             loading <2
+               ? "text-danger"
+               : (loading === 2
+                  ? "text-warning"
+                  : (loading>3
+                     ? "text-success"
+                     : "text-danger"
+                    )
+                 )
+           }>
+                  {status}
+                  {loading === 2
+                   ? <FaSpinner className="ml-2 fa-spin faa-spin animated"/>
+                   : (
+                     loading === 3 || loading === 1
+                       ? <FaExclamationTriangle className="ml-2"  />
+                       : <FaCheckCircle className="ml-2" />
+                   )
+                  }
+                </div>)
+          }
           <div className="form-group row">
             {signature}
           </div>
@@ -161,24 +177,4 @@ function uint8ArrayToHex(uint8Arr) {
     result += uint8Arr[i].toString(16);
   }
   return result;
-}
-
-function mintNFT(web3, dealId) {
-  return new Promise(async (resolve, reject) => {
-    const tokenId = Web3Utils.sha3(uuidv4());
-    const accounts = await web3.eth.getAccounts();
-    const from = accounts[0];
-    const address = '0xEbAe3a7309D2875389A814D4269C9f8af853Bc48'; // kovan
-    const infoUrl = `https://local2.oja.me/api/deals/${dealId}/contract.pdf.hex`;
-    const contract = new web3.eth.Contract(Contracts[CAR_LOAN].abi, address);
-    contract.methods.mint(from, tokenId, infoUrl).send({from: from}).on('receipt', receipt => {
-      console.log(`Minted NFT! receipt: `, receipt);
-    }).on('transactionHash', hash => {
-      console.log(`Minted NFT! hash! `, hash);
-      resolve({tokenId, txHash: hash});
-    }).catch(error => {
-      console.error(error);
-      reject(error);
-    });
-  });
 }

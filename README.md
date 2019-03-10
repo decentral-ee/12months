@@ -44,3 +44,7 @@ Built With
     solidity
     0x
 
+## Try it out
+
+- https://ethparis.oja.me/ (Kovan network)
+

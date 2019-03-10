@@ -4,17 +4,14 @@ import Web3 from 'web3';
 
 export function useWeb3() {
   const [web3, setWeb3] = useState();
+  const [ethereum, setEthereum] = useState();
 
   async function initWeb3() {
     if (window.ethereum) {
-      try {
-        await ethereum.enable();
-        setWeb3(new Web3(ethereum));
-      } catch (error) {
-        console.error("Failed to create web3!", error);
-      }
+      setWeb3(new Web3(window.ethereum));
+      setEthereum(window.ethereum);
     } else if (window.web3) {
-      setWeb3(new Web3(web3.currentProvider));
+      setWeb3(new Web3(window.web3.currentProvider));
     }
   }
 
@@ -22,5 +19,5 @@ export function useWeb3() {
     initWeb3();
   });
 
-  return web3;
+  return [web3, ethereum];
 }

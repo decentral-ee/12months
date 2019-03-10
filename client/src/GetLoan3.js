@@ -5,7 +5,7 @@ import { FaFilePdf, FaSpinner, FaExclamationTriangle, FaCheckCircle } from 'reac
 import {HistoryContext} from './context';
 import {ApiContext, Web3Context} from './context';
 import {sendFiles} from './api';
-const CarLoadJson = require('../contracts/CarLoan.json').abi;
+import {Contracts, CAR_LOAN} from './contracts';
 
 export default function GetLoan3(props) {
   const {location} = props;
@@ -16,8 +16,12 @@ export default function GetLoan3(props) {
   const [dealId, setDealId] = useState();
   const [status, setStatus] = useState('signing contract...');
   const apiURI = useContext(ApiContext);
+<<<<<<< HEAD
   const web3 = useContext(Web3Context);
   const history = useContext(HistoryContext);
+=======
+  const {web3, ethereum} = useContext(Web3Context);
+>>>>>>> c82b0940911f40d0b9b9b2ad5de22e9cf6acec4c
 
   async function handleSign() {
     const pdfHex = uint8ArrayToHex(pdfBytes);
@@ -27,9 +31,10 @@ export default function GetLoan3(props) {
 
     //  const docHash = '413140d54372f9baf481d4c54e2d5c7bcf28fd6087000280e07976121dd54af2';
     try {
+
       setLoading(1);
-      //  const signature = await sign(pdfHash);
-      const signature = { hex: 'a33635e931a1a3fb5b31b463ee5b46e78cf8fb45d2c48618e8d4668f19c9d4930287232ef39159086c9a848c541dc2784754146a91fa5987dd53e6577e531225be1f3f63873e03ecd012c326b116353233fdc6e7de2bf1ef3c84c0ff94dce3fd' };
+      const signature = await sign(pdfHash);
+      // const signature = { hex: 'a33635e931a1a3fb5b31b463ee5b46e78cf8fb45d2c48618e8d4668f19c9d4930287232ef39159086c9a848c541dc2784754146a91fa5987dd53e6577e531225be1f3f63873e03ecd012c326b116353233fdc6e7de2bf1ef3c84c0ff94dce3fd' };
       console.log(`Signature! `, signature);
       setSignature(signature.hex);
 
@@ -41,14 +46,13 @@ export default function GetLoan3(props) {
       console.log(`Sent files! Deal id: ${dealId}`);
 
       // mint the nft
-      const address = '';
-      const infoUrl = "http://12months.finance/storage/deals/cars/42/contract.pdf";
       setStatus('Please Sign on Metamask');
       setLoading(3);
-      const contract = new web3.eth.Contract(CarLoadJson.abi, address);
-      const receipt = await contract.methods.mint(infoUrl).send();
-      console.log(`Minted NFT! Receipt: `, receipt);
-      setStatus('NFT Minted!!');
+      if (ethereum) {
+        await ethereum.enable();
+      }
+      const txHash = await mintNFT(web3, dealId);
+      console.log(`NFT Minted! hash: ${txHash}`);
       setLoading(4);
       setTimeout(()=>{
         handleSuccess();
@@ -153,4 +157,22 @@ function uint8ArrayToHex(uint8Arr) {
     result += uint8Arr[i].toString(16);
   }
   return result;
+}
+
+function mintNFT(web3, dealId) {
+  return new Promise(async (resolve, reject) => {
+    const accounts = await web3.eth.getAccounts();
+    const address = '0x1bEA84E2e81d2B206c63Eb74Fc81C88D9e59eb16'; // kovan
+    const infoUrl = `https://local2.oja.me/api/deals/${dealId}/contract.pdf.hex`;
+    const contract = new web3.eth.Contract(Contracts[CAR_LOAN].abi, address);
+    contract.methods.mint(infoUrl).send({from: accounts[0]}).on('receipt', receipt => {
+      console.log(`Minted NFT! receipt: `, receipt);
+    }).on('transactionHash', hash => {
+      console.log(`Minted NFT! hash! `, hash);
+      resolve(hash);
+    }).catch(error => {
+      console.error(error);
+      reject(error);
+    });
+  });
 }

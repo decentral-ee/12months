@@ -1,12 +1,7 @@
 import React, {useState, useRef, useContext} from 'react';
-<<<<<<< HEAD:client/src/listing.js
-import {HistoryContext} from './context';
-import Image from './images/image2.svg';
-=======
 import {HistoryContext, Web3Context} from './context';
 import {approveProxyAllowance, fillOrder} from './zerox';
 import Image from './images/image.svg';
->>>>>>> afd27c2c25aca37da9c01e707e572558fb10f075:client/src/Deal.js
 import {FaFilePdf} from 'react-icons/fa';
 
 export default function Deal(props) {

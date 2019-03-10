@@ -25,12 +25,13 @@ function App () {
     const accounts = await web3.eth.getAccounts();
     setAccount(accounts[0]);
   }
+
   async function getDaiBalance(){
     console.log("account: ", account);
     let tokenAddress = "0xc4375b7de8af5a38a93548eb8453a498222c4ff2";
     let minABI = [
       {
-        " constant":true,
+        "constant":true,
         "inputs":[{"name":"_owner","type":"address"}],
         "name":"balanceOf",
         "outputs":[{"name":"balance","type":"uint256"}],
@@ -48,12 +49,13 @@ function App () {
     console.log("contract: ", contract);
     const balance = await contract.methods.balanceOf(account).call({from: account});
     console.log("balance: ", balance.toString());
+    setDaiBalance(web3.utils.fromWei(balance, 'ether'));
   }
 
   useEffect( ()=> {
     web3 && loadAccount();
     account &&  getDaiBalance();
-  },[web3,account]);
+  },[web3, account]);
 
   const myBlockies = () => (
     account && (<Blockies
@@ -77,7 +79,7 @@ function App () {
             </h1>
           </div>
           <div className="p-4 my-auto col text-right">
-            <h3 className="account d-inline mt-4">{ daiBalance }</h3>
+            <h3 className="account d-inline mt-4">{daiBalance}</h3>
             <h3 className="account d-inline mb-4">{account && account.substr(0,6)}...{account && account.substr(38 , 42)}</h3>
             {myBlockies()}
           </div>

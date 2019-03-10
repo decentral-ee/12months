@@ -28,6 +28,15 @@ export default function Deal(props) {
 
     const fillOrderTxHash = await fillOrder(from, zxOrder, zxOrderSignature);
     console.log(`Fill Order success! hash: ${fillOrderTxHash}`);
+
+    // forward to the summary page
+    const path = '/deal-invested/'+dealId;
+    history.push({
+      pathname: path,
+      state: {
+        fillOrderTxHash: fillOrderTxHash,
+      }
+    });
   }
 
   function handleDeposit(){

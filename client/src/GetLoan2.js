@@ -47,7 +47,12 @@ export default function GetLoan2(props) {
       vin: vin,
       model: model,
       year: year,
-      idNumber: idNumber
+      idNumber: idNumber,
+      ask: ask,
+      interest: interest,
+      term: term,
+      pdf: pdf.current,
+      pdfBytes: pdfBytes.current
     };
     console.log(`Data to upload! `, data);
 
@@ -58,12 +63,6 @@ export default function GetLoan2(props) {
       pathname: '/loan/3',
       state: {
         ...data,
-        ask: ask,
-        interest: interest,
-        term: term,
-        idNumber: idNumber,
-        pdf: pdf.current,
-        pdfBytes: pdfBytes.current
       }
     });
   }

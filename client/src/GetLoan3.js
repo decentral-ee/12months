@@ -64,14 +64,14 @@ export default function GetLoan3(props) {
 
       setLoading(4);
       setTimeout(()=>{
-        handleSuccess(dealId);
+        handleSuccess(dealId, tokenId, txHash);
       },2000);
     } catch (event) {
       console.log(`Signing failed!`, event);
     }
   }
 
-  function handleSuccess(dealId) {
+  function handleSuccess(dealId, tokenId, txHash) {
     const data = {
       success: true,
       photo: photo,
@@ -82,11 +82,13 @@ export default function GetLoan3(props) {
       interest: interest,
       term: term,
       pdf: pdf.current,
-      pdfBytes: pdfBytes.current
+      pdfBytes: pdfBytes.current,
+      tokenId,
+      txHash
     };
 
     // next page -> listing page with extra custom message
-    const path = '/listing/'+dealId;
+    const path = '/deal/'+dealId;
     history.push({
       pathname: path,
       state: {

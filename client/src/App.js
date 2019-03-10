@@ -6,7 +6,7 @@ import {useWeb3} from './useWeb3';
 import Landing from './Landing';
 import GetLoan from './GetLoan';
 import ListDeals from './listDeals';
-import Listing from './listing';
+import Deal from './Deal';
 // include all the css-es
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
@@ -39,7 +39,7 @@ function App () {
                   <Route exact path="/" component={Landing} />
                   <Route path="/loan" component={GetLoan} />
                   <Route path="/listdeals" component={ListDeals} />
-                  <Route path="/deal" component={Listing} />
+                  <Route path="/deal/:dealId" component={Deal} />
                 </Switch>
               </Web3Context.Provider>
             </ApiContext.Provider>

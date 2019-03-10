@@ -13,11 +13,13 @@ export default function GetLoan3(props) {
   const [signature, setSignature] = useState();
   const [downloaded, setDownloaded] = useState(false);
   const [loading, setLoading] = useState(0);
-  const [dealId, setDealId] = useState();
   const [status, setStatus] = useState('signing contract...');
   const apiURI = useContext(ApiContext);
   const history = useContext(HistoryContext);
+<<<<<<< HEAD
 
+=======
+>>>>>>> a6898507d8ebd2975164e8cb596b46e9a889466b
   const {web3, ethereum} = useContext(Web3Context);
 
   async function handleSign() {
@@ -30,8 +32,8 @@ export default function GetLoan3(props) {
     try {
 
       setLoading(1);
-      const signature = await sign(pdfHash);
-      // const signature = { hex: 'a33635e931a1a3fb5b31b463ee5b46e78cf8fb45d2c48618e8d4668f19c9d4930287232ef39159086c9a848c541dc2784754146a91fa5987dd53e6577e531225be1f3f63873e03ecd012c326b116353233fdc6e7de2bf1ef3c84c0ff94dce3fd' };
+      // const signature = await sign(pdfHash);
+      const signature = { hex: 'a33635e931a1a3fb5b31b463ee5b46e78cf8fb45d2c48618e8d4668f19c9d4930287232ef39159086c9a848c541dc2784754146a91fa5987dd53e6577e531225be1f3f63873e03ecd012c326b116353233fdc6e7de2bf1ef3c84c0ff94dce3fd' };
       console.log(`Signature! `, signature);
       setSignature(signature.hex);
 
@@ -40,7 +42,6 @@ export default function GetLoan3(props) {
       setStatus('uploading contract...');
       setLoading(2);
       const {dealId} = await sendFiles(apiURI, pdfHex, signature.hex);
-      setDealId(dealId);
       console.log(`Sent files! Deal id: ${dealId}`);
 
       // mint the nft
@@ -53,14 +54,14 @@ export default function GetLoan3(props) {
       console.log(`NFT Minted! hash: ${txHash}`);
       setLoading(4);
       setTimeout(()=>{
-        handleSuccess();
+        handleSuccess(dealId);
       },2000);
     } catch (event) {
       console.log(`Signing failed!`, event);
     }
   }
 
-  function handleSuccess() {
+  function handleSuccess(dealId) {
     const data = {
       success: true,
       photo: photo,

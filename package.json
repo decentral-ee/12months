@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "description": "Instant crypto loans for up to 12 months with your ID card.",
   "scripts": {
+    "bootstrap": "npx lerna bootstrap --hoist",
+    "clean": "npx lerna clean --yes",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,9 +22,6 @@
     "url": "https://github.com/decentral-ee/12months/issues"
   },
   "homepage": "https://github.com/decentral-ee/12months#readme",
-  "dependencies": {
-    "sails": "^1.1.0"
-  },
   "devDependencies": {
     "dotenv": "^6.2.0",
     "web3-hdwallet-provider": "^1.0.4-fix2"

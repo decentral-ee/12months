@@ -265,6 +265,10 @@ contract CarLoan is IERC721Token, SafeMath {
   }
 
   /*** Extra ***/
+  function name() public pure returns (string memory) { return "12months(TM) Car Loan"; }
+
+  function symbol() public pure returns (string memory) { return "12KUUD"; }
+
   function mint(address _to, uint256 _tokenId, string calldata _infoUrl) external {
       _mint(_to, _tokenId, _infoUrl);
   }

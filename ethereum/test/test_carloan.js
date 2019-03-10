@@ -31,7 +31,7 @@ contract("Test order contract", (accounts) => {
 
   let daiContract;
   let carLoanContract;
-  let exchange;
+  //let exchange;
 
   console.log("maker address", maker);
   console.log("taker address", taker);

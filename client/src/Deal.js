@@ -6,7 +6,8 @@ import {FaFilePdf} from 'react-icons/fa';
 
 export default function Deal(props) {
   const {location} = props;
-  const {vin, model, year, ask, term, interest, success, dealId, tokenId, txHash, zxOrder, zxOrderSignature} = location.state;
+  const {dealId} = props.match.params;
+  const {vin, model, year, ask, term, interest, success, txHash, zxOrder, zxOrderSignature} = location.state;
   const history = useContext(HistoryContext);
   const [photo, setPhoto] = useState(Image);
   const [contract, setContract] = useState();
@@ -19,7 +20,7 @@ export default function Deal(props) {
     const from = accounts[0];
     console.log(`My account: ${from}`);
 
-    // allocate and 
+    // allocate and
     if (ethereum) {
       await ethereum.enable();
     }

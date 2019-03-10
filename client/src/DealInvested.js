@@ -14,7 +14,11 @@ export default function Deal(props) {
           <div className="p-4 getLoan3">
             <div className=" row no-gutters">
               <label htmlFor="vin" className="col-sm-4 col-form-label">TX hash</label>
-              <div className="col-sm-8 px-2">{fillOrderTxHash}</div>
+              <div className="col-sm-8 px-2">
+                <div className="badge badge-success">
+                  <a target="_blank" href={`https://kovan.etherscan.io/tx/${fillOrderTxHash}`}>Your Loan is live on Ethereum</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>

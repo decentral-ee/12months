@@ -5,7 +5,7 @@ import { FaFilePdf, FaSpinner, FaExclamationTriangle, FaCheckCircle } from 'reac
 import {HistoryContext} from './context';
 import {ApiContext, Web3Context} from './context';
 import {createDeal, updateDeal} from './api';
-import {mintNFT, signOrder} from './zerox';
+import {mintNFT, signOrder, approvalForAllAsync} from './zerox';
 
 export default function GetLoan3(props) {
   const {location} = props;
@@ -60,6 +60,8 @@ export default function GetLoan3(props) {
         zxOrderSignature: zxSignature,
         zxOrder: zxOrder
       });
+
+      approvalForAllAsync(from);
 
       setLoading(4);
       setTimeout(()=>{

@@ -3,7 +3,7 @@ export const DAI = 'DAI';
 export const Contracts = {
   [CAR_LOAN]: {
     abi: require('./CarLoan.json').abi,
-    address: '0xEbAe3a7309D2875389A814D4269C9f8af853Bc48' // kovan
+    address: '0x82EB61067F5Ba60e138c688083B9D89ef7dD96f3' // kovan
   },
   [DAI]: {
     abi: require('./IERC20.json').abi,

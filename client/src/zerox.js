@@ -4,18 +4,20 @@ import {
   assetDataUtils,
   orderHashUtils,
   signatureUtils,
-  MetamaskSubprovider
+  MetamaskSubprovider,
+  generatePseudoRandomSalt
 } from '0x.js';
 import {Contracts, CAR_LOAN, DAI} from './contracts';
 import * as Web3Utils from 'web3-utils';
 const {Web3Wrapper} = require("@0x/web3-wrapper");
 const uuidv4 = require('uuid/v4');
 
-const ZERO = new BigNumber(0);
+const ZERO = "0";
 const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 const DECIMALS = 18;
 const makerAssetAmount = new BigNumber(1);
 const takerAssetAmount = Web3Wrapper.toBaseUnitAmount(new BigNumber(0.1), DECIMALS);
+const web3Wrapper = new Web3Wrapper(window.ethereum);
 
 export function mintNFT(web3, from, dealId) {
   return new Promise(async (resolve, reject) => {
@@ -50,10 +52,9 @@ export async function signOrder(web3, maker, tokenId) {
     feeRecipientAddress: NULL_ADDRESS,
     senderAddress: NULL_ADDRESS,
     expirationTimeSeconds: new BigNumber(blockNow).plus(3600 * 24 * 30).toString(),
-    //  salt: generatePseudoRandomSalt().toString(),
-    salt: new BigNumber(0),
-    makerAssetAmount: makerAssetAmount,
-    takerAssetAmount: takerAssetAmount,
+    salt: generatePseudoRandomSalt().toString(),
+    makerAssetAmount: makerAssetAmount.toString(),
+    takerAssetAmount: takerAssetAmount.toString(),
     makerAssetData,
     takerAssetData,
     makerFee: ZERO,
@@ -69,10 +70,24 @@ export async function signOrder(web3, maker, tokenId) {
   return {zxOrder: order, zxSignature: signature};
 }
 
+export async function approvalForAllAsync(maker) {
+  const provider = new MetamaskSubprovider(window.ethereum);
+  const contractWrappers = new ContractWrappers(provider, { networkId: 42 /* kovan */ });
+  const txHash = await contractWrappers.erc721Token.setProxyApprovalForAllAsync(
+    Contracts[CAR_LOAN].address,
+    maker,
+    true,
+  );
+  await web3Wrapper.awaitTransactionMinedAsync(txHash);
+  return txHash;
+}
+
 export async function approveProxyAllowance(taker) {
   const provider = new MetamaskSubprovider(window.ethereum);
   const contractWrappers = new ContractWrappers(provider, { networkId: 42 /* kovan */ });
-  return await contractWrappers.erc20Token.setUnlimitedProxyAllowanceAsync(Contracts[DAI].address, taker);
+  const txHash = await contractWrappers.erc20Token.setUnlimitedProxyAllowanceAsync(Contracts[DAI].address, taker);
+  await web3Wrapper.awaitTransactionMinedAsync(txHash);
+  return txHash;
 }
 
 const exchangeGasAmount = 500000;
@@ -95,12 +110,14 @@ export async function fillOrder(taker, zkOrder, signature) {
   };
   const provider = new MetamaskSubprovider(window.ethereum);
   const contractWrappers = new ContractWrappers(provider, { networkId: 42 /* kovan */ });
-  return await contractWrappers.exchange.fillOrderAsync({
+  const txHash = await contractWrappers.exchange.fillOrderAsync({
     ...order,
     exchangeAddress: contractWrappers.exchange.address,
     signature
   }, takerAssetAmount, taker, {
     gasLimit: exchangeGasAmount,
     shouldValidate: true
-  });
+  })
+  await web3Wrapper.awaitTransactionMinedAsync(txHash);
+  return txHash;
 }

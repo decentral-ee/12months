@@ -5,7 +5,7 @@ import {FaFilePdf} from 'react-icons/fa';
 
 export default function Listing(props) {
   const {location} = props;
-  const {vin, model, year, dealId, ask, term, interest} = location.state;
+  const {vin, model, year, dealId, ask, term, interest, success} = location.state;
   const history = useContext(HistoryContext);
   const [photo, setPhoto] = useState(Image);
   const [contract, setContract] = useState();
@@ -53,25 +53,31 @@ export default function Listing(props) {
             </div>
             <div className="mt-3">
               <div className="row no-gutters d-flex justify-content-between">
-              {deposited
-                ? (
-                  <>
-                    <button href={contract}
-                      onClick={event => setDownloaded(true)}
-                      className="btn btn-primary mr-3"
-                      download="contract.pdf"><FaFilePdf />
-                      Download contract
-                    </button>
-                    <button
-                      type="button"
-                      disabled={!downloaded}
-                      className="btn btn-lg btn-primary"
-                      onClick={handleSign}>
-                      Sign!
-                    </button>
-                  </>
+              {success
+                ? (<div className="badge badge-success">Your Loan is live on Ethereum</div>)
+                : (
+                  deposited
+                  ? (
+                    <>
+                      <button href={contract}
+                        onClick={event => setDownloaded(true)}
+                        className="btn btn-primary mr-3"
+                        download="contract.pdf"><FaFilePdf />
+                        Download contract
+                      </button>
+                      <button
+                        type="button"
+                        disabled={!downloaded}
+                        className="btn btn-lg btn-primary"
+                        onClick={handleSign}>
+                        Sign!
+                      </button>
+                    </>
+                  )
+                : (
+                  <button type="button" className="btn btn-lg btn-primary" onClick={handleDeposit}>Finance!</button>
+                  )
                 )
-                : <button type="button" className="btn btn-lg btn-primary" onClick={handleDeposit}>Finance!</button>
               }
               </div>
             </div>

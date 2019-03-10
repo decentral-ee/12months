@@ -6,6 +6,7 @@ import { FaUpload } from 'react-icons/fa';
 export default function GetLoan1() {
   const history = useContext(HistoryContext);
   const [photo, setPhoto] = useState(Image);
+  const [selected, setSelected] = useState(false);
   const [vin, setVin] = useState("CR1PT0T0TH3M00N");
   const [year, setYear] = useState("2017");
   const [model, setModel] = useState("Rekt Lambo");
@@ -65,6 +66,7 @@ export default function GetLoan1() {
     reader.addEventListener("load", () => {
       const fileBase64 = reader.result;
       console.log(`File base64!  `, fileBase64);
+      setSelected(true);
       setPhoto(fileBase64);
     }, false);
     reader.readAsDataURL(files[0]);
@@ -99,8 +101,12 @@ export default function GetLoan1() {
       <div className="body">
         <div className="card-title">Car Details:</div>
         <div className="form card mx-auto">
-          <div style={{position: 'absolute', top: '127px' ,width: '38px', right: '173px'}} dangerouslySetInnerHTML={{__html : svg}}  ></div>
-          <div style={{position: 'absolute', top: '127px' ,width: '38px', right: '43px'}} dangerouslySetInnerHTML={{__html : svg}}  ></div>
+          {!selected && (
+            <>
+              <div id="frontWheel" class="wheels" style={{position: 'absolute', top: '128px' ,width: '38px', right: '173px'}} dangerouslySetInnerHTML={{__html : svg}}  ></div>
+              <div id="backWheel" class="wheels" style={{position: 'absolute', top: '127px' ,width: '38px', right: '43px'}} dangerouslySetInnerHTML={{__html : svg}}  ></div>
+            </>
+          )}
           <div className="photo card-img-top mb-3" style={{backgroundImage: `url(${photo})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
             <div className="upload">
               <button type="button" className="float-right btn btn-primary m-3" onClick={handleUploadFile}>

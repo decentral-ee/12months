@@ -38,7 +38,7 @@ export default function GetLoan3(props) {
       console.log(`Starting to send files! Api: ${apiURI}`);
       setStatus('uploading contract...');
       setLoading(2);
-      const {dealId} = await sendFiles(apiURI, pdfHex, signature.hex, location.state);
+        const {dealId} = await sendFiles(apiURI, pdfHex, signature.hex, location.state);
       console.log(`Sent files! Deal id: ${dealId}`);
 
       // mint the nft

@@ -188,8 +188,8 @@ input{
 }
 
 .wheel {
-  -webkit-animation: spin 2.5s linear infinite;
-  animation: spin 2.5s linear infinite;
+  -webkit-animation: spin 2.8s linear infinite;
+  animation: spin 2.8s linear infinite;
 }
 
 .red{

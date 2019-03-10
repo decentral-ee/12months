@@ -16,10 +16,6 @@ export default function GetLoan3(props) {
   const [status, setStatus] = useState('signing contract...');
   const apiURI = useContext(ApiContext);
   const history = useContext(HistoryContext);
-<<<<<<< HEAD
-
-=======
->>>>>>> a6898507d8ebd2975164e8cb596b46e9a889466b
   const {web3, ethereum} = useContext(Web3Context);
 
   async function handleSign() {
@@ -37,7 +33,7 @@ export default function GetLoan3(props) {
       console.log(`Signature! `, signature);
       setSignature(signature.hex);
 
-      // send files to the server
+      // send f to the server
       console.log(`Starting to send files! Api: ${apiURI}`);
       setStatus('uploading contract...');
       setLoading(2);
@@ -126,7 +122,7 @@ export default function GetLoan3(props) {
             </div>
           </div>
           {loading>0
-            && (<div className={
+            && (<div id="status" className={
               loading <2
               ? "text-danger"
               : (loading === 2
@@ -139,11 +135,11 @@ export default function GetLoan3(props) {
               }>
             {status}
             {loading === 2
-            ? <FaSpinner className="fa-spin faa-spin.animated"/>
+            ? <FaSpinner className="ml-2 fa-spin faa-spin animated"/>
             : (
               loading === 3 || loading === 1
-              ? <FaExclamationTriangle />
-              : <FaCheckCircle />
+              ? <FaExclamationTriangle className="ml-2"  />
+              : <FaCheckCircle className="ml-2" />
               )
             }
             </div>)

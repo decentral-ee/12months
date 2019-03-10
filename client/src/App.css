@@ -149,7 +149,9 @@ input{
   height: 24px;
   line-height: 24px;
 }
-
+#status{
+  font-size:1.5rem;
+}
 /**************
 * spinner
 *********/
@@ -183,4 +185,13 @@ input{
 .faa-parent.animated-hover:hover > .faa-spin {
   -webkit-animation: spin 1.5s linear infinite;
   animation: spin 1.5s linear infinite;
+}
+
+.wheel {
+  -webkit-animation: spin 2.5s linear infinite;
+  animation: spin 2.5s linear infinite;
+}
+
+.red{
+  background-color: red;
 }

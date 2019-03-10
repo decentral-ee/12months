@@ -16,7 +16,7 @@ const ZERO = "0";
 const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 const DECIMALS = 18;
 const makerAssetAmount = new BigNumber(1);
-const takerAssetAmount = Web3Wrapper.toBaseUnitAmount(new BigNumber(0.1), DECIMALS);
+const takerAssetAmount = Web3Wrapper.toBaseUnitAmount(new BigNumber(100), DECIMALS);
 const web3Wrapper = new Web3Wrapper(window.ethereum);
 
 export function mintNFT(web3, from, dealId) {
@@ -82,10 +82,13 @@ export async function approvalForAllAsync(maker) {
   return txHash;
 }
 
-export async function approveProxyAllowance(taker) {
+export async function approveProxyAllowance(taker, zkOrder) {
   const provider = new MetamaskSubprovider(window.ethereum);
   const contractWrappers = new ContractWrappers(provider, { networkId: 42 /* kovan */ });
-  const txHash = await contractWrappers.erc20Token.setUnlimitedProxyAllowanceAsync(Contracts[DAI].address, taker);
+  const txHash = await contractWrappers.erc20Token.setProxyAllowanceAsync(
+    Contracts[DAI].address,
+    taker,
+    new BigNumber(zkOrder.takerAssetAmount));
   await web3Wrapper.awaitTransactionMinedAsync(txHash);
   return txHash;
 }

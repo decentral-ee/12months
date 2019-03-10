@@ -78,13 +78,14 @@ contract("Test order contract", (accounts) => {
     await web3tx(daiContract.mint, "mint dai")(taker, takerAssetAmount.toString(), { from: taker });
     assert.equal(await daiContract.balanceOf.call(taker), takerAssetAmount.toString());
     console.log("taker dai balance", web3.utils.fromWei(await daiContract.balanceOf.call(taker), "ether").toString());
-    console.log("taker erc20Token.setUnlimitedProxyAllowanceAsync....");
-    await web3Wrapper.awaitTransactionMinedAsync(await contractWrappers.erc20Token.setUnlimitedProxyAllowanceAsync(
+    console.log("taker erc20Token.setProxyAllowanceAsync....");
+    await web3Wrapper.awaitTransactionMinedAsync(await contractWrappers.erc20Token.setProxyAllowanceAsync(
       daiContract.address,
-      taker
+      taker,
+      takerAssetAmount
     ));
-    console.log("taker erc20Token.setUnlimitedProxyAllowanceAsync done.");
-    assert.equal((await daiContract.allowance.call(taker, contractWrappers.erc20Proxy.address)).toString(), MAX_UINT32);
+    console.log("taker erc20Token.setProxyAllowanceAsync done.");
+    assert.equal((await daiContract.allowance.call(taker, contractWrappers.erc20Proxy.address)).toString(), takerAssetAmount);
 
     // maker creates order
     const order = {

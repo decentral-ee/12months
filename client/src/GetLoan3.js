@@ -16,12 +16,8 @@ export default function GetLoan3(props) {
   const [dealId, setDealId] = useState();
   const [status, setStatus] = useState('signing contract...');
   const apiURI = useContext(ApiContext);
-<<<<<<< HEAD
-  const web3 = useContext(Web3Context);
   const history = useContext(HistoryContext);
-=======
   const {web3, ethereum} = useContext(Web3Context);
->>>>>>> c82b0940911f40d0b9b9b2ad5de22e9cf6acec4c
 
   async function handleSign() {
     const pdfHex = uint8ArrayToHex(pdfBytes);

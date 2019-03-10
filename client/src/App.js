@@ -60,7 +60,7 @@ function App () {
       seed={account.toLowerCase()}
       size={8}
       scale={8}
-      className="identicon"
+      className="identicon d-inline"
     />)
   )
   return (
@@ -77,9 +77,12 @@ function App () {
             </h1>
           </div>
           <div className="p-4 my-auto col text-right">
-            <h3 className="account d-inline mt-4">{ daiBalance }</h3>
-            <h3 className="account d-inline mb-4">{account && account.substr(0,6)}...{account && account.substr(38 , 42)}</h3>
-            {myBlockies()}
+
+          {myBlockies()}
+            <div className="d-inline-block">
+              <h3 className="account">{ daiBalance } DAI</h3>
+              <h3 className="account"> {account && account.substr(0,6)}...{account && account.substr(38 , 42)}</h3>
+            </div>
           </div>
         </div>
         <div className="body container-fluid p-4">

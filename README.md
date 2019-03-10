@@ -1,4 +1,6 @@
-(/images/screenshot.jpg)
+![GitHub Logo](/images/screenshot.jpg)
+Format: ![Alt Text](url)
+
 
 # Instant Crypto Loans using your car as collateral
 

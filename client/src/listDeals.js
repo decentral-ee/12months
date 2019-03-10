@@ -1,8 +1,12 @@
 import React, {useContext} from 'react';
 import {HistoryContext} from './context';
+import {ApiContext, Web3Context} from './context';
+import {useLoadDeals} from './useLoadDeals';
 
 export default function ListDeals() {
   const history = useContext(HistoryContext);
+  const apiURI = useContext(ApiContext);
+  const {deals} = useLoadDeals(apiURI);
 
   function finance(deal){
     const path = "/deal/" + deal.dealId;
@@ -14,40 +18,6 @@ export default function ListDeals() {
     });
   }
 
-  const Tbody=()=>{
-    const values = [];
-    const test = {
-      vin : 'CR1PT0T0TH3M00N',
-      year :"2017",
-      model : "Rekt Lambo",
-      ask : "1000",
-      interest : "10",
-      term : "12",
-      dealId :"2222"
-    };
-    const test2 = test;
-    values.push(test);
-    values.push(test2);
-    var html = [];
-    values.forEach(v => {
-      let row =
-          <tr className=''>
-            <th  scope="row">{v.model}</th>
-            <td>{v.year}</td>
-            <td>{v.vin}</td>
-            <td>{v.ask}</td>
-            <td>{v.interest}</td>
-            <td>{v.term}</td>
-            <td>
-              <button id={v.dealId} className='finance' onClick={(e)=>finance(v)}>
-                Finance!
-              </button>
-            </td>
-          </tr>;
-      html.push(row);
-    });
-    return html;
-  }
   return (
     <>
       <div className="body">
@@ -64,7 +34,27 @@ export default function ListDeals() {
             </tr>
           </thead>
           <tbody>
-            {Tbody()}
+            {!deals && (
+              <tr><td>Loading ...</td></tr>
+            )}
+            {deals && deals.map(v => {
+              if (!v.model) { return null; }
+              return (
+                <tr className=''>
+                  <th  scope="row">{v.model}</th>
+                  <td>{v.year}</td>
+                  <td>{v.vin}</td>
+                  <td>{v.ask}</td>
+                  <td>{v.interest}</td>
+                  <td>{v.term}</td>
+                  <td>
+                    <button id={v.dealId} className='finance' onClick={(e)=>finance(v)}>
+                      Finance!
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
         <div>Check the vehicle's history by searching for the VIN in the <a href="https://eteenindus.mnt.ee/public/soidukTaustakontroll.jsf" target="_blank" rel="noopener noreferrer">Estonian Vehicle Registry</a> </div>

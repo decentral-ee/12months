@@ -6,6 +6,7 @@ import {HistoryContext} from './context';
 import {ApiContext, Web3Context} from './context';
 import {sendFiles} from './api';
 import {Contracts, CAR_LOAN} from './contracts';
+const uuidv4 = require('uuid/v4');
 
 export default function GetLoan3(props) {
   const {location} = props;
@@ -37,7 +38,7 @@ export default function GetLoan3(props) {
       console.log(`Starting to send files! Api: ${apiURI}`);
       setStatus('uploading contract...');
       setLoading(2);
-      const {dealId} = await sendFiles(apiURI, pdfHex, signature.hex);
+      const {dealId} = await sendFiles(apiURI, pdfHex, signature.hex, location.state);
       console.log(`Sent files! Deal id: ${dealId}`);
 
       // mint the nft
@@ -46,8 +47,8 @@ export default function GetLoan3(props) {
       if (ethereum) {
         await ethereum.enable();
       }
-      const txHash = await mintNFT(web3, dealId);
-      console.log(`NFT Minted! hash: ${txHash}`);
+      const {tokenId, txHash} = await mintNFT(web3, dealId);
+      console.log(`NFT Minted! hash: ${txHash}, tokenId: ${tokenId}`);
       setLoading(4);
       setTimeout(()=>{
         handleSuccess(dealId);
@@ -163,15 +164,17 @@ function uint8ArrayToHex(uint8Arr) {
 
 function mintNFT(web3, dealId) {
   return new Promise(async (resolve, reject) => {
+    const tokenId = Web3Utils.sha3(uuidv4());
     const accounts = await web3.eth.getAccounts();
-    const address = '0x1bEA84E2e81d2B206c63Eb74Fc81C88D9e59eb16'; // kovan
+    const from = accounts[0];
+    const address = '0xEbAe3a7309D2875389A814D4269C9f8af853Bc48'; // kovan
     const infoUrl = `https://local2.oja.me/api/deals/${dealId}/contract.pdf.hex`;
     const contract = new web3.eth.Contract(Contracts[CAR_LOAN].abi, address);
-    contract.methods.mint(infoUrl).send({from: accounts[0]}).on('receipt', receipt => {
+    contract.methods.mint(from, tokenId, infoUrl).send({from: from}).on('receipt', receipt => {
       console.log(`Minted NFT! receipt: `, receipt);
     }).on('transactionHash', hash => {
       console.log(`Minted NFT! hash! `, hash);
-      resolve(hash);
+      resolve({tokenId, txHash: hash});
     }).catch(error => {
       console.error(error);
       reject(error);

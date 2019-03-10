@@ -11,91 +11,135 @@ const { Web3Wrapper } = require("@0x/web3-wrapper");
 const { expectEvent } = require("openzeppelin-test-helpers");
 const CarLoan = artifacts.require("CarLoan");
 const FakeDAI = artifacts.require("FakeDAI");
+const IERC20 = artifacts.require("IERC20");
+
+const ZERO = new BigNumber(0);
+const MAX_UINT32 = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
+const DECIMALS = 18;
 
 contract("Test order contract", (accounts) => {
-  const DECIMALS = 18;
-  const admin = accounts[0].toLowerCase();
-  const maker = accounts[1].toLowerCase();
-  const taker = accounts[2].toLowerCase();
-  const contractWrappers = new ContractWrappers(web3.currentProvider.engine, { networkId: 42 /* kovan */ });
+  const maker = accounts[0].toLowerCase();
+  const taker = accounts[1].toLowerCase();
+  const admin = accounts[2].toLowerCase();
+  const contractWrappers = new ContractWrappers(web3.currentProvider, { networkId: 42 /* kovan */ });
   const makerAssetAmount = new BigNumber(1);
   const takerAssetAmount = Web3Wrapper.toBaseUnitAmount(new BigNumber(0.1), DECIMALS);
+  const web3Wrapper = new Web3Wrapper(web3.currentProvider);
 
   let daiContract;
   let carLoanContract;
 
+  console.log("maker address", maker);
+  console.log("taker address", taker);
+
   beforeEach(async () => {
-    daiContract = await web3tx(FakeDAI.new, "deploying FakeDAI contract")({ from: admin });
+    //console.log("contractWrappers ...", contractWrappers);
+    //daiContract = await web3tx(FakeDAI.new, "deploying FakeDAI contract")({ from: admin });
+    daiContract = await IERC20.at("0xc4375b7de8af5a38a93548eb8453a498222c4ff2");
     carLoanContract = await web3tx(CarLoan.new, "deployiny CarLoan contract")({ from: admin });
   });
 
   it("full flow", async () => {
     const infoUrl = "http://12months.finance/storage/deals/cars/42/contract.pdf";
-
-    // maker get car loan token
-    await web3tx(carLoanContract.mint, "mint new car loan token")(infoUrl, { from: maker });
-    const mintedTokens = await carLoanContract.getPastEvents("Mint", {
-      fromBlock: 0,
-      toBlock: "latest",
-      filter: {
-        owner: maker
-      }
-    });
-    assert.equal(mintedTokens.length, 1);
-    const tokenId = mintedTokens[0].args.tokenId;
-    assert.equal(await carLoanContract.tokenMetadata(tokenId), infoUrl);
-
-    console.log("maker setUnlimitedProxyAllowanceAsync");
-    await contractWrappers.erc721Token.setProxyApprovalForAllAsync(
-      carLoanContract.address,
-      maker,
-      true,
-    );
-
-
+    const tokenId = `0x${generatePseudoRandomSalt().toString(16)}`;
     const makerAssetData = assetDataUtils.encodeERC721AssetData(carLoanContract.address, tokenId);
     const takerAssetData = assetDataUtils.encodeERC20AssetData(daiContract.address);
 
+    console.log("tokenId", tokenId);
+    console.log("makerAssetData", makerAssetData);
+    console.log("takerAssetData", takerAssetData);
+
+    // maker get car loan token
+    await web3tx(carLoanContract.mint, "mint new car loan token")(maker, tokenId, infoUrl, { from: maker });
+    assert.equal(await carLoanContract.tokenMetadata(tokenId), infoUrl);
+    assert.equal((await carLoanContract.ownerOf(tokenId)).toLowerCase(), maker);
+
+    console.log("maker erc721Token.setProxyApprovalForAllAsync....");
+    await web3Wrapper.awaitTransactionMinedAsync(await contractWrappers.erc721Token.setProxyApprovalForAllAsync(
+      carLoanContract.address,
+      maker,
+      true,
+    ));
+    console.log("maker erc721Token.setProxyApprovalForAllAsync done");
+    assert.isTrue(await carLoanContract.isApprovedForAll.call(maker, contractWrappers.erc721Proxy.address));
+
+    // taker get dai
+    if (false) {
+      await web3tx(daiContract.mint, "mint dai")(taker, takerAssetAmount.toString(), { from: taker });
+      assert.equal(await daiContract.balanceOf.call(taker), takerAssetAmount.toString());
+    } else {
+      console.log("taker dai balance", web3.utils.fromWei(await daiContract.balanceOf.call(taker), "ether").toString());
+    }
+    console.log("taker erc20Token.setUnlimitedProxyAllowanceAsync....");
+    await web3Wrapper.awaitTransactionMinedAsync(await contractWrappers.erc20Token.setUnlimitedProxyAllowanceAsync(
+      daiContract.address,
+      taker
+    ));
+    console.log("taker erc20Token.setUnlimitedProxyAllowanceAsync done.");
+    assert.equal((await daiContract.allowance.call(taker, contractWrappers.erc20Proxy.address)).toString(), MAX_UINT32);
+
     // maker creates order
+    const exchangeAddress = contractWrappers.exchange.address;
+    console.log("exchangeAddress", exchangeAddress);
     const order = {
-      exchangeAddress: contractWrappers.exchange.address,
       makerAddress: maker,
       takerAddress: NULL_ADDRESS,
-      senderAddress: NULL_ADDRESS,
       feeRecipientAddress: NULL_ADDRESS,
-      expirationTimeSeconds: 3600 * 24 * 30,
-      salt: generatePseudoRandomSalt(),
-      makerAssetAmount,
-      takerAssetAmount,
+      senderAddress: NULL_ADDRESS,
+      expirationTimeSeconds: new BigNumber(3600 * 24 * 30),
+      //salt: generatePseudoRandomSalt().toString(),
+      salt: new BigNumber(0),
+      makerAssetAmount: makerAssetAmount,
+      takerAssetAmount: takerAssetAmount,
       makerAssetData,
       takerAssetData,
       makerFee: ZERO,
       takerFee: ZERO,
     };
     console.log("order created", order);
-    const orderHashHex = orderHashUtils.getOrderHashHex(order);
+    const orderHashHex = orderHashUtils.getOrderHashHex({
+      ...order,
+      exchangeAddress
+    });
     const signature = await signatureUtils.ecSignHashAsync(web3.currentProvider, orderHashHex, maker);
-    const signedOrder = { ...order, signature };
-
-    // taker get dai
-    await web3tx(daiContract.mint, "mint dai")(taker, takerAssetAmount.toString(), { from: admin });
-    console.log("taker setUnlimitedProxyAllowanceAsync");
-    await contractWrappers.erc20Token.setUnlimitedProxyAllowanceAsync(
-      daiContract.address,
-      taker
-    );
+    console.log("signature", signature);
 
     // exchange
-    console.log("exchange.fillOrderAsync");
-    await contractWrappers.exchange.fillOrderAsync(signedOrder, takerAssetAmount, taker, {
-      gasLimit: 400000,
+    const exchangeGasAmount = 500000;
+    if (false) {
+      console.log("exchange.fillOrderAsync...");
+      await web3Wrapper.awaitTransactionMinedAsync(await contractWrappers.exchange.fillOrderAsync({
+        ...order,
+        exchangeAddress,
+        signature}, takerAssetAmount, taker, {
+        gasLimit: exchangeGasAmount,
+        shouldValidate: true
+      }));
+      console.log("exchange.fillOrderAsync done");
+    } else {
+      const exchangeInstance = await contractWrappers.exchange._getExchangeContractAsync();
+      /*await exchangeInstance.fillOrder.callAsync(order, takerAssetAmount, signature, {
+        from: taker,
+        gas: exchangeGasAmount
+      });*/
+      await web3tx(exchangeInstance.fillOrder.sendTransactionAsync.bind(exchangeInstance), "exchangeInstance.fillOrder")(
+        order, takerAssetAmount, signature, {
+          from: taker,
+          gas: exchangeGasAmount
+        }
+      );
+    }
+    const carTransfers = await carLoanContract.getPastEvents("Transfer", {
+      from: 0,
+      to: "latest"
     });
+    console.log("carTransfers", carTransfers);
+    console.log(await carLoanContract.ownerOf.call(tokenId), (await daiContract.balanceOf.call(maker)).toString(), (await daiContract.balanceOf.call(taker)).toString());
+    assert.equal((await carLoanContract.ownerOf.call(tokenId)).toLowerCase(), taker);
+    assert.equal((await daiContract.balanceOf.call(maker)).toString(), takerAssetAmount.toString());
   });
 });
-
-const ZERO = "0";
-
-const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 function web3tx(fn, msg, expects = {}) {
   return async function() {

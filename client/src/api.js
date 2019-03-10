@@ -1,7 +1,9 @@
-export function sendFiles(apiURI, pdfHex, sigHex) {
+export function sendFiles(apiURI, pdfHex, sigHex, params) {
+  const {pdfBytes, ...rest} = params;
+
   return new Promise((resolve, reject) => {
     fetch(`${apiURI}/api/deals`, {
-      // credentials: 'include',
+      //   credentials: 'include',
       method: 'POST',
       body: JSON.stringify({
         files: [{
@@ -10,7 +12,8 @@ export function sendFiles(apiURI, pdfHex, sigHex) {
         }, {
           content: sigHex,
           name: 'contract.signature.hex'
-        }]
+        }],
+        params: rest
       }),
       headers: {
         "Content-Type": "application/json"

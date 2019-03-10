@@ -10,6 +10,10 @@ module.exports = {
       description: 'Contract data of the deal',
       type: 'json',
       required: true
+    },
+    params: {
+      type: 'json',
+      required: true
     }
   },
 
@@ -23,7 +27,9 @@ module.exports = {
     const T='api-deals-create';
     sails.log(`${T} requested`);
 
-    const deal = await Deal.create().fetch();
+    const deal = await Deal.create({
+      ...inputs.params
+    }).fetch();
     sails.log.verbose(`${T} deal ${deal.id} created`);
 
     const dealStorageDir = path.join(sails.config.custom.storageDirectory, deal.id.toString());

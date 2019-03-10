@@ -1,6 +1,8 @@
-##Instant Crypto Loans using your car as collateral
+(/images/screenshot.jpg)
 
-#Inspiration
+# Instant Crypto Loans using your car as collateral
+
+## Inspiration
 
 We are Estonian residents and know our way around electronic ID systems. We decided to leverage the possibilities of 0x markets.
 #What it does
@@ -11,17 +13,17 @@ The user needs to sign a contract using their Estonian Id Card, and the hash of 
 
 On the buyer side, creditors can see all available loan agreements. While personal data of the seller is not exposed, users can see data from the cars, and check the cars on the Estonian Vehicle registry. They can then select a loan they want to finance, sign the off-chain legal contract, and deposit the required capital (in DAI).
 
-Because the off-chain contract is signed by both parties, the contract is legally enforceable in Estonian courts. We believe this synergy will allow for many Decentralised Finance applications, bringing liquidity to assets in Estonia.
-How we built it
+Because the off-chain contract is signed by both parties, the contract is legally enforceable in Estonian courts. We believe this synergy will allow for many Decentralised Finance applications, bringing the potential of global liquidity pools to Estonia.
+## How we built it
 
 We built the front-end using react.js and web3.js The back-end (very slim) is in node.js The smart contracts are written in solidity
-#Challenges we ran into
+## Challenges we ran into
 
 Our main challenge was integrating with the 0x protocol, as well as creating a browser client for signatures using the Estonian E-ID
-Accomplishments that we're proud of
+## Accomplishments that we're proud of
 
 Linking off-chain and on-chain dynamics to create new decentralized finance opportunities.
-#What's next for 12months
+## What's next for 12months
 
 To further enhance the platform we will
 

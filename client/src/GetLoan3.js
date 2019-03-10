@@ -50,9 +50,10 @@ export default function GetLoan3(props) {
       const {tokenId, txHash} = await mintNFT(web3, dealId);
       console.log(`NFT Minted! hash: ${txHash}, tokenId: ${tokenId}`);
       setLoading(4);
+      setStatus('Transaction successful');
       setTimeout(()=>{
         handleSuccess(dealId);
-      },2000);
+      },6000);
     } catch (event) {
       console.log(`Signing failed!`, event);
     }

@@ -1,7 +1,7 @@
 import React, {useState, useContext, useRef} from 'react';
 import {HistoryContext} from './context';
 import {Page, Text, View, Image, Document, StyleSheet, BlobProvider} from '@react-pdf/renderer';
-
+import {Line} from 'react-chartjs-2';
 // Create styles
 const styles = StyleSheet.create({
   page: {
@@ -54,7 +54,6 @@ export default function GetLoan2(props) {
       pdf: pdf.current,
       pdfBytes: pdfBytes.current
     };
-    console.log(`Data to upload! `, data);
 
     // generate the contract pdf
 
@@ -64,9 +63,18 @@ export default function GetLoan2(props) {
       state: {
         ...data,
       }
-    });
+    })
   }
-
+  function formatDate(today){
+    const dd = today.getDate()<10
+      ? "0"+today.getDate()
+      : today.getDate();
+    const mm = (today.getMonth()+1)<10
+      ? "0"+today.getMonth()+1
+      : today.getMonth(1)+1;
+    const yyyy = today.getFullYear();
+    return dd + "/" + mm + "/" + yyyy;
+  }
   const PdfDoc = (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -74,7 +82,7 @@ export default function GetLoan2(props) {
           <Text>Collateralized Loan Contract</Text>
         </View>
         <View style={styles.section}>
-          <Text>Post Date: {today.getDay()}/{today.getMonth()}/{today.getYear()}</Text>
+          <Text>Post Date: {()=>formatDate(today)}</Text>
         </View>
         <View style={styles.section}>
           <View style={styles.column}>
@@ -114,6 +122,33 @@ export default function GetLoan2(props) {
       </Page>
     </Document>
   );
+  /*
+  const chartData = {
+      labels: ['March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November','December', 'January', 'February', 'March'],
+      datasets: [
+        {
+          label: 'My First dataset',
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor: 'rgba(75,192,192,0.4)',
+          borderColor: 'rgba(75,192,192,1)',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: 'rgba(75,192,192,1)',
+          pointBackgroundColor: '#fff',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+          pointHoverBorderColor: 'rgba(220,220,220,1)',
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data:
+        }
+      ]
+    };*/
 
   return (
     <>
@@ -155,6 +190,9 @@ export default function GetLoan2(props) {
                 onChange={event => setTerm(event.target.value)}
               />
             </div>
+          </div>
+          <div className="row">
+            {/*<Line data={chartData} width={300} height={200}> </Line> */}
           </div>
           <div className="form-group row">
             <label htmlFor="vin" className="col-sm-4 col-form-label"></label>

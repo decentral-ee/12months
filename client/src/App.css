@@ -52,6 +52,9 @@ footer {
   color: var(--light-blue);
   text-shadow:1px 1px 1px var(--light);
 }
+.identicon{
+  border-radius:100%;
+}
 h1,h2,h3,h4{
   font-family: 'Patua One', cursive;
 }

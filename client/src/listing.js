@@ -1,6 +1,6 @@
 import React, {useState, useRef, useContext} from 'react';
 import {HistoryContext} from './context';
-import Image from './images/image.svg';
+import Image from './images/image2.svg';
 import {FaFilePdf} from 'react-icons/fa';
 
 export default function Listing(props) {

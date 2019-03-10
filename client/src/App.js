@@ -1,4 +1,4 @@
-import React,{useState, useContext, useRef} from 'react';
+import React,{useState, useContext, useEffect, useRef} from 'react';
 import {Router, Switch, Route, Link} from 'react-router-dom';
 import createBrowserHistory from "history/createBrowserHistory";
 import {HistoryContext, ApiContext, Web3Context} from './context';
@@ -17,18 +17,16 @@ const apiURI = process.env.REACT_APP_API_URI;
 
 function App () {
   const [web3, ethereum] = useWeb3();
-  const [daiBalance, setDaiBalance] = useState(0);
+  const [daiBalance, setDaiBalance] = useState();
   const [account, setAccount] = useState();
 
   async function loadAccount(){
     const accounts = await web3.eth.getAccounts();
     setAccount(accounts[0]);
-    getDaiBalance();
   }
-  web3 && loadAccount();
   async function getDaiBalance(){
+    console.log("account: ", account);
     let tokenAddress = "0xc4375b7de8af5a38a93548eb8453a498222c4ff2";
-    let walletAddress = account;
     let minABI = [
       {
         " constant":true,
@@ -45,14 +43,17 @@ function App () {
         "type":"function"
       }
     ];
-    let contract = await web3.eth.contract(minABI).at(tokenAddress);
-    contract.balanceOf(walletAddress, (error, balance) => {
-      contract.decimals((error, decimals) => {
-        balance = balance.div(10**decimals);
-        setDaiBalance(balance);
-      });
-    });
+    let contract = new web3.eth.Contract(minABI, tokenAddress);
+    console.log("contract: ", contract);
+    const balance = await contract.methods.balanceOf(account).call({from: account});
+    console.log("balance: ", balance.toString());
   }
+
+  useEffect( ()=> {
+    web3 && loadAccount();
+    account &&  getDaiBalance();
+  },[web3,account]);
+
   const myBlockies = () => (
     account && (<Blockies
       seed={account.toLowerCase()}

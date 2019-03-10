@@ -1,5 +1,4 @@
-![GitHub Logo](./client/images/screenshot.jpg)
-Format: ![Alt Text](url)
+![12month financial](./client/src/images/screenshot.jpg) 
 
 
 # Instant Crypto Loans using your car as collateral
@@ -44,4 +43,8 @@ Built With
     web3
     solidity
     0x
+
+## Try it out
+
+- https://ethparis.oja.me/ (Kovan network)
 

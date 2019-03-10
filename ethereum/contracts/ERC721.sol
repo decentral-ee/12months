@@ -3,19 +3,27 @@ pragma solidity ^0.5.0;
 /// @title Interface for contracts conforming to ERC-721: Non-Fungible Tokens
 /// @author Dieter Shirley <dete@axiomzen.co> (https://github.com/dete)
 contract ERC721 {
+    bytes4 constant internal ERC721_RECEIVED = bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"));
+
     // Required methods
-    function totalSupply() public view returns (uint256 total);
-    function balanceOf(address _owner) public view returns (uint256 balance);
+    function totalSupply() external view returns (uint256 total);
+
+    function balanceOf(address _owner) external view returns (uint256 balance);
     function ownerOf(uint256 _tokenId) external view returns (address owner);
+
     function approve(address _to, uint256 _tokenId) external;
-    function transfer(address _to, uint256 _tokenId) external;
-    function transferFrom(address _from, address _to, uint256 _tokenId) external;
+    function getApproved(uint256 tokenId) external view returns (address operator);
 
     function setApprovalForAll(address _operator, bool _approved) external;
     function isApprovedForAll(address _owner, address _operator)
-        public
+        external
         view
         returns (bool);
+
+    function transfer(address _to, uint256 _tokenId) external;
+    function transferFrom(address _from, address _to, uint256 _tokenId) external;
+    function safeTransferFrom(address from, address to, uint256 tokenId) external;
+    function safeTransferFrom(address from, address to, uint256 tokenId, bytes calldata data) external;
 
 
     // Events
@@ -54,7 +62,4 @@ contract ERC721 {
     function symbol() public view returns (string memory);
     function tokensOfOwner(address _owner) external view returns (uint256[] memory tokenIds);
     function tokenMetadata(uint256 _tokenId) public view returns (string memory infoUrl);
-
-    // ERC-165 Compatibility (https://github.com/ethereum/EIPs/issues/165)
-    //function supportsInterface(bytes4 _interfaceID) external view returns (bool);
 }

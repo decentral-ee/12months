@@ -11,6 +11,9 @@ contract FakeDAI is ERC20 {
      */
     function mint(address to, uint256 value) public returns (bool) {
         _mint(to, value);
+        emit Mint(to, value);
         return true;
     }
+
+    event Mint(address indexed to, uint256 amount);
 }

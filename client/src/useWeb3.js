@@ -17,7 +17,7 @@ export function useWeb3() {
 
   useEffect(() => {
     initWeb3();
-  });
+  }, []);
 
   return [web3, ethereum];
 }

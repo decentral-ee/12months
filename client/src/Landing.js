@@ -4,8 +4,8 @@ import {Link} from 'react-router-dom';
 export default function Landing() {
   return (
     <div className="landing">
-      <h2 className="text-center pt-2">Stake your car,</h2>
-      <h2 className="text-center pb-2">get an instant loan</h2>
+      <h1 className="text-center pt-2">Stake your car,</h1>
+      <h1 className="text-center pb-2">get an instant loan</h1>
       <div className="blocks row flex justify-content-center">
         <div className="d-flex align-items-stretch m-4 justify-content-center">
           <Link

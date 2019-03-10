@@ -5,9 +5,7 @@ import { FaFilePdf, FaSpinner, FaExclamationTriangle, FaCheckCircle } from 'reac
 import {HistoryContext} from './context';
 import {ApiContext, Web3Context} from './context';
 import {createDeal, updateDeal} from './api';
-import {signOrder} from './zerox';
-import {Contracts, CAR_LOAN} from './contracts';
-const uuidv4 = require('uuid/v4');
+import {mintNFT, signOrder} from './zerox';
 
 export default function GetLoan3(props) {
   const {location} = props;
@@ -56,10 +54,11 @@ export default function GetLoan3(props) {
       console.log(`NFT Minted! hash: ${txHash}, tokenId: ${tokenId}`);
 
       // sign the order
-      const signedOrder = await signOrder(web3, from, tokenId);
-      console.log(`NFT order signed! signedOrder: ${signedOrder}`);
+      const {zxOrder, zxSignature} = await signOrder(web3, from, tokenId);
+      console.log(`NFT order signed! signedOrder: ${zxSignature}`);
       await updateDeal(apiURI, dealId, {
-        buyerSignature: signedOrder
+        zxOrderSignature: zxSignature,
+        zxOrder: zxOrder
       });
 
       setLoading(4);
@@ -175,21 +174,4 @@ function uint8ArrayToHex(uint8Arr) {
     result += uint8Arr[i].toString(16);
   }
   return result;
-}
-
-function mintNFT(web3, from, dealId) {
-  return new Promise(async (resolve, reject) => {
-    const tokenId = Web3Utils.sha3(uuidv4());
-    const contract = new web3.eth.Contract(Contracts[CAR_LOAN].abi, Contracts[CAR_LOAN].address);
-    const infoUrl = `https://local2.oja.me/api/deals/${dealId}/contract.pdf.hex`;
-    contract.methods.mint(from, tokenId, infoUrl).send({from: from}).on('receipt', receipt => {
-      console.log(`Minted NFT! receipt: `, receipt);
-    }).on('transactionHash', hash => {
-      console.log(`Minted NFT! hash! `, hash);
-      resolve({tokenId, txHash: hash});
-    }).catch(error => {
-      console.error(error);
-      reject(error);
-    });
-  });
 }

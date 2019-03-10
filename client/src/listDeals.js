@@ -38,7 +38,7 @@ export default function ListDeals() {
               <tr><td>Loading ...</td></tr>
             )}
             {deals && deals.map(v => {
-              if (!v.model) { return null; }
+              if (!v.zxOrder) { return null; }
               return (
                 <tr className=''>
                   <th scope="row">{v.model}</th>

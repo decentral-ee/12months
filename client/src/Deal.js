@@ -1,24 +1,40 @@
 import React, {useState, useRef, useContext} from 'react';
-import {HistoryContext} from './context';
+import {HistoryContext, Web3Context} from './context';
+import {approveProxyAllowance, fillOrder} from './zerox';
 import Image from './images/image.svg';
 import {FaFilePdf} from 'react-icons/fa';
 
 export default function Deal(props) {
   const {location} = props;
-  const {vin, model, year, ask, term, interest, success, dealId, tokenId, txHash} = location.state;
+  const {vin, model, year, ask, term, interest, success, dealId, tokenId, txHash, zxOrder, zxSignature} = location.state;
   const history = useContext(HistoryContext);
   const [photo, setPhoto] = useState(Image);
   const [contract, setContract] = useState();
   const [deposited, setDeposited] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
+  const {web3, ethereum} = useContext(Web3Context);
 
-  function handleSign(){
+  async function handleSign(){
+    const accounts = await web3.eth.getAccounts();
+    const from = accounts[0];
+    console.log(`My account: ${from}`);
 
+    // allocate and 
+    if (ethereum) {
+      await ethereum.enable();
+    }
+    const approveTxHash = await approveProxyAllowance(from);
+    console.log(`Approved! hash: ${approveTxHash}`);
+
+    const fillOrderTxHash = await fillOrder(from);
+    console.log(`Fill Order success! hash: ${fillOrderTxHash}`);
   }
+
   function handleDeposit(){
     setDeposited(true);
     // metamask deposit ask DAI
   }
+
   return (
     <>
       <div className="body">
@@ -53,34 +69,34 @@ export default function Deal(props) {
             </div>
             <div className="mt-3">
               <div className="row no-gutters d-flex justify-content-between">
-              {success
-               ? (<div className="badge badge-success">
-                    <a target="_blank" href={`https://kovan.etherscan.io/tx/${txHash}`}>Your Loan is live on Ethereum</a>
-                  </div>)
-                : (
-                  deposited
-                  ? (
-                    <>
-                      <button href={contract}
-                        onClick={event => setDownloaded(true)}
-                        className="btn btn-primary mr-3"
-                        download="contract.pdf"><FaFilePdf />
-                        Download contract
-                      </button>
-                      <button
-                        type="button"
-                        disabled={!downloaded}
-                        className="btn btn-lg btn-primary"
-                        onClick={handleSign}>
-                        Sign!
-                      </button>
-                    </>
-                  )
-                : (
-                  <button type="button" className="btn btn-lg btn-primary" onClick={handleDeposit}>Finance!</button>
-                  )
-                )
-              }
+                {success
+                 ? (<div className="badge badge-success">
+                                          <a target="_blank" href={`https://kovan.etherscan.io/tx/${txHash}`}>Your Loan is live on Ethereum</a>
+                                        </div>)
+                 : (
+                   deposited
+                     ? (
+                       <>
+                         <button href={contract}
+                                 onClick={event => setDownloaded(true)}
+                                 className="btn btn-primary mr-3"
+                                 download="contract.pdf"><FaFilePdf />
+                           Download contract
+                         </button>
+                         <button
+                           type="button"
+                           disabled={!downloaded}
+                           className="btn btn-lg btn-primary"
+                           onClick={handleSign}>
+                           Sign!
+                         </button>
+                       </>
+                     )
+                     : (
+                       <button type="button" className="btn btn-lg btn-primary" onClick={handleDeposit}>Finance!</button>
+                     )
+                 )
+                }
               </div>
             </div>
             <div className="form-group row">

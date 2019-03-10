@@ -5,7 +5,10 @@ module.exports = {
   friendlyName: 'Get the deal',
 
   inputs: {
-    buyerSignature: {
+    zxOrder: {
+      type: 'json'
+    },
+    zxOrderSignature: {
       type: 'string'
     }
   },
@@ -18,10 +21,10 @@ module.exports = {
 
   fn: async function(inputs, exits) {
     const T='api-deals-buyer-signature';
-    sails.log(`${T} requested. buyerSignature: ${inputs.buyerSignature}`);
+    sails.log(`${T} requested. inputs: ${inputs}`);
 
     const dealId = this.req.param('deal_id');
-    const deals = await Deal.find({id: dealId});
+    let deals = await Deal.find({id: dealId});
     if (!deals || !deals.length) {
       return this.res.json({error : 'File not Found'});
     }
@@ -29,9 +32,13 @@ module.exports = {
     console.log(`${T} deal: `, deal);
 
     // update
-    deal = await Deal.update({
+    deals = await Deal.update({
       id: deal.id
-    }).set({buyerSignature: inputs.buyerSignature}).fetch()[0];
+    }).set({
+      zxOrder: inputs.zxOrder,
+      zxOrderSignature: inputs.zxOrderSignature,
+    }).fetch();
+    deal = deals[0];
     console.log(`${T} deal: `, deal);
 
     exits.success({

@@ -1,4 +1,4 @@
-import React, {useState, useRef, useContext} from 'react';
+import React, {useState, useRef, useContext, useEffect} from 'react';
 import {HistoryContext, Web3Context} from './context';
 import {approveProxyAllowance, fillOrder} from './zerox';
 import Image from './images/image2.svg';
@@ -14,6 +14,11 @@ export default function Deal(props) {
   const [deposited, setDeposited] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const {web3, ethereum} = useContext(Web3Context);
+
+  useEffect(() => {
+    console.log(`Photo: `, location.state.photo);
+    location.state.photo && setPhoto(location.state.photo);
+  }, [location.state.photo]);
 
   async function handleSign(){
     const accounts = await web3.eth.getAccounts();

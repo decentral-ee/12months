@@ -39,8 +39,9 @@ export async function signOrder(web3, maker, tokenId) {
   const contractWrappers = new ContractWrappers(provider, { networkId: 42 /* kovan */ });
   const makerAssetData = assetDataUtils.encodeERC721AssetData(Contracts[CAR_LOAN].address, tokenId);
   const takerAssetData = assetDataUtils.encodeERC20AssetData(Contracts[DAI].address);
+  const blockNow = (await web3.eth.getBlock("latest")).timestamp;
 
-  //  maker creates order
+  //                              maker creates order
   const exchangeAddress = contractWrappers.exchange.address;
   console.log("exchangeAddress", exchangeAddress);
   const order = {
@@ -48,7 +49,7 @@ export async function signOrder(web3, maker, tokenId) {
     takerAddress: NULL_ADDRESS,
     feeRecipientAddress: NULL_ADDRESS,
     senderAddress: NULL_ADDRESS,
-    expirationTimeSeconds: new BigNumber(3600 * 24 * 30),
+    expirationTimeSeconds: new BigNumber(blockNow).plus(3600 * 24 * 30).toString(),
     //  salt: generatePseudoRandomSalt().toString(),
     salt: new BigNumber(0),
     makerAssetAmount: makerAssetAmount,
@@ -76,10 +77,25 @@ export async function approveProxyAllowance(taker) {
 
 const exchangeGasAmount = 500000;
 
-export async function fillOrder(taker, order, signature) {
+export async function fillOrder(taker, zkOrder, signature) {
+  console.log(`fillOrder! `, taker, zkOrder, signature);
+  const order = {
+    makerAddress: zkOrder.makerAddress,
+    takerAddress: zkOrder.takerAddress,
+    feeRecipientAddress: zkOrder.feeRecipientAddress,
+    senderAddress: zkOrder.senderAddress,
+    expirationTimeSeconds: zkOrder.expirationTimeSeconds,
+    salt: zkOrder.salt,
+    makerAssetAmount: zkOrder.makerAssetAmount,
+    takerAssetAmount: zkOrder.takerAssetAmount,
+    makerAssetData: zkOrder.makerAssetData,
+    takerAssetData: zkOrder.takerAssetData,
+    makerFee: zkOrder.makerFee,
+    takerFee: zkOrder.takerFee,
+  };
   const provider = new MetamaskSubprovider(window.ethereum);
   const contractWrappers = new ContractWrappers(provider, { networkId: 42 /* kovan */ });
-  await contractWrappers.exchange.fillOrderAsync({
+  return await contractWrappers.exchange.fillOrderAsync({
     ...order,
     exchangeAddress: contractWrappers.exchange.address,
     signature

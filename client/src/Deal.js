@@ -6,7 +6,7 @@ import {FaFilePdf} from 'react-icons/fa';
 
 export default function Deal(props) {
   const {location} = props;
-  const {vin, model, year, ask, term, interest, success, dealId, tokenId, txHash, zxOrder, zxSignature} = location.state;
+  const {vin, model, year, ask, term, interest, success, dealId, tokenId, txHash, zxOrder, zxOrderSignature} = location.state;
   const history = useContext(HistoryContext);
   const [photo, setPhoto] = useState(Image);
   const [contract, setContract] = useState();
@@ -26,7 +26,7 @@ export default function Deal(props) {
     const approveTxHash = await approveProxyAllowance(from);
     console.log(`Approved! hash: ${approveTxHash}`);
 
-    const fillOrderTxHash = await fillOrder(from);
+    const fillOrderTxHash = await fillOrder(from, zxOrder, zxOrderSignature);
     console.log(`Fill Order success! hash: ${fillOrderTxHash}`);
   }
 

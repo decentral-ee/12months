@@ -1,4 +1,4 @@
-![GitHub Logo](/client/images/screenshot.jpg)
+![GitHub Logo](./client/images/screenshot.jpg)
 Format: ![Alt Text](url)
 
 

@@ -169,6 +169,12 @@ input{
 #status{
   font-size:1.5rem;
 }
+
+.deal-download {
+    margin-left: 8px;
+    line-height: 2em;
+}
+
 /**************
 * spinner
 *********/

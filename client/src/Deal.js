@@ -9,7 +9,7 @@ const svg = `<svg viewBox="25 25.1 89.8 90.7" xmlns="http://www.w3.org/2000/svg"
 export default function Deal(props) {
   const {location} = props;
   const {dealId} = props.match.params;
-  const {vin, model, year, ask, term, interest, success, txHash, zxOrder, zxOrderSignature} = location.state;
+  const {pdf, vin, model, year, ask, term, interest, success, txHash, zxOrder, zxOrderSignature} = location.state;
   const history = useContext(HistoryContext);
   const [photo, setPhoto] = useState(Image);
   const [contract, setContract] = useState();
@@ -26,6 +26,10 @@ export default function Deal(props) {
     const accounts = await web3.eth.getAccounts();
     const from = accounts[0];
     console.log(`My account: ${from}`);
+    if (!from) {
+      console.log(`Refresh browser! Metamask Account not found.`);
+      return;
+    }
 
     // allocate and
     if (ethereum) {
@@ -97,12 +101,10 @@ export default function Deal(props) {
                    deposited
                      ? (
                        <>
-                         <button href={contract}
-                                 onClick={event => setDownloaded(true)}
-                                 className="btn btn-primary mr-3"
-                                 download="contract.pdf"><FaFilePdf />
-                           Download contract
-                         </button>
+                         <a href={pdf} onClick={event => setDownloaded(true)} className="btn btn-primary mr-3" download="contract.pdf">
+                           <FaFilePdf />
+                           <span className="deal-download">Download contract</span>
+                         </a>
                          <button
                            type="button"
                            disabled={!downloaded}
